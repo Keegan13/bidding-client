@@ -1,32 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const BiddingCard = ({ component, items }) => {
-  const ComponentToRender = component;
-  let content = (<div></div>);
+import './style.scss';
+import * as moment from 'moment';
+import { Countdown } from 'react-countdown-now';
+import { unregisterDecorator } from 'handlebars';
 
-  // If we have items, render them
-  if (items) {
-    content = items.map((item) => (
-      <ComponentToRender key={`item-${item.id}`} item={item} />
-    ));
-  } else {
-    // Otherwise render a single component
-    content = (<ComponentToRender />);
+const BiddingCard = (props) => {
+  const { assignment } = props;
+  // let getStatus = (a) => {
+  //   if (moment(a.startDateTime).diff(Date.now)) {
+
+  //   }
+
+  // };
+
+  // const [state, setState] = useState({
+  //   countdown: 123,
+  //   status: "asdfsd"
+
+  // });
+
+
+  if (assignment == null || assignment == undefined || assignment.id < 0) {
+    return "";
   }
 
   return (
-    <div className="list-wrapper">
-      <ul>
-        {content}
-      </ul>
+    <div className="bidding-container">
+      <pre>
+        {JSON.stringify(assignment,null,1)}
+      </pre>|
     </div>
-  );
+  )
 };
 
-List.propTypes = {
-  component: PropTypes.elementType.isRequired,
-  items: PropTypes.array,
-};
+// BiddingCard.propTypes = {
+//   item: PropTypes.any
+// };
 
-export default List;
+export default BiddingCard;

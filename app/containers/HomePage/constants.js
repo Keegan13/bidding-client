@@ -1,1 +1,1 @@
-export const MY_ACTION = 'MY_ACTION';
+export const CHANGE_USERNAME = 'CHANGE_USERNAME';

@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\app",
+    "\\app\\containers",
+    "\\app\\containers\\App\\tests"
   ],
+  "SelectedNode": "\\app\\containers\\HomePage",
   "PreviewInSolutionExplorer": false
 }
