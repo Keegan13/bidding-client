@@ -3,16 +3,15 @@ import { compose, bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import {
     makeSelectLoading,
-    makeSelectError,
-    makeSelectAssignments
+    makeSelectError
 } from './../../containers/App/selectors';
-import { splitBidThunk, loadAssignmentsThunk } from './../../api/thunks';
+import { splitBidThunk } from './../../api/thunks';
 import BiddingTable from './BiddingTable';
+import { makeSelectSelectedAssignment } from 'selectors/bidding';
 
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     splitBidAction: splitBidThunk,
-    loadAssignments: loadAssignmentsThunk
 }, dispatch)
 
 
@@ -20,7 +19,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 const mapStateToProps = createStructuredSelector({
     loading: makeSelectLoading(),
     error: makeSelectError(),
-    assignments: makeSelectAssignments()
+    assignment: makeSelectSelectedAssignment()
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

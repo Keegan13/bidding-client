@@ -1,0 +1,23 @@
+.bidding-dashboard {
+  display: flex;
+  flex-direction: row;
+  .dashboard-column {
+    &:hover {
+      background-color: lightsalmon;
+
+      .cutter-name {
+          font-size: xx-large;
+      }
+    }
+    display: flex;
+    flex-direction: column;
+    .div {
+      display: block;
+    }
+  }
+}
+
+// display: flex;
+// flex-direction: column;
+// flex-basis: 100%;
+// flex: 1;

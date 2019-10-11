@@ -7,12 +7,15 @@ import React from 'react';
 import './style.scss';
 import { PropTypes } from 'prop-types';
 import BiddingCard from '../../components/BiddingCard';
+import BiddingDashboard from '../../components/BiddingDashboard';
+import { loadAssignmentsThunk } from '../../api/thunks';
+import  BiddingSummary  from 'components/BiddingSummary';
 
 export default class BiddingPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.callThunk=()=>{
+    this.callThunk = () => {
       const { splitBidAction } = this.props;
 
       splitBidAction({
@@ -23,7 +26,12 @@ export default class BiddingPage extends React.Component {
     }
   }
   componentDidMount() {
-   
+    const { loadAssignments } = this.props;
+    loadAssignments();
+  }
+  shouldComponentUpdate(){
+
+    return true;
   }
   // eslint-disable-line react/prefer-stateless-function
 
@@ -31,18 +39,13 @@ export default class BiddingPage extends React.Component {
   // there's no need to re-render this component
 
   render() {
+    const { assignment, assignments } = this.props;
     const { onCallMyAction, myValue } = this.props;
-    const item = {
-      id: 12,
-      stake: 10000,
-      name: "Mumbai Race"
-    };
+
     return (
       <div className="bidding-page">
-        <BiddingCard item={{ item: item }} ></BiddingCard>
-        <h2>{myValue}</h2>
-        <button onClick={() => onCallMyAction()}></button>
-        <button onClick={this.callThunk}>Call thunk</button>
+        <BiddingSummary assignments={assignments} />
+        <BiddingDashboard />
       </div>
     );
   }
@@ -52,7 +55,6 @@ export default class BiddingPage extends React.Component {
 BiddingPage.propTypes = {
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  myValue: PropTypes.number,
   on: PropTypes.func
 };
 

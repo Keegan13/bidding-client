@@ -1,56 +1,45 @@
 import React from 'react';
 import BiddingCard from 'components/BiddingCard';
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
-import './style.scss';
 import { loadAssignmentsThunk } from '../../api/thunks';
+import { Formik } from 'formik';
+import BetForm from './BetForm/BetForm';
+import './style.scss';
 
 class BiddingTable extends React.Component {
     constructor(props) {
         super(props);
 
+        this.onPlaceBetSubmit = this.onPlaceBetSubmit.bind(this);
     }
 
     componentDidMount() {
-        const { loadAssignments } = this.props;
-        loadAssignments();
     }
 
-    onBidSplitSubmit() {
+    shouldComponentUpdate(nextProps,nextState)
+    {
+        return true;
+    }
 
-
+    onPlaceBetSubmit() {
 
     }
 
     render() {
-        const { assignments } = this.props;
-        const bids = [{
-            id: 2,
-            volume: 300,
-            odds: "1.2 : 1",
-            bookmaker: "Rick James"
-        }, {
-            id: 3,
-            volume: 3400,
-            odds: "1.4 : 1",
-            bookmaker: "Rick James"
-        }, {
-            id: 4,
-            volume: 10000,
-            odds: "1.5 : 1",
-            bookmaker: "Rick James"
-        }];
-
+        const { assignment } = this.props;
+        
+        if (!assignment) {
+            return '';
+        }
 
         return (<div className="bidding-container">
             <div>
-                <BiddingCard assignment={assignments&&assignments.length>0?assignments[0]:null} />
+                <BiddingCard item={assignment} />
                 <div>
                     <p>Comments</p>
                     <textarea className="feedback-area"></textarea>
@@ -59,19 +48,9 @@ class BiddingTable extends React.Component {
             </div>
             <div>
                 <div>
-                    <form>
-                        <label>
-                            Volume
-                        </label>
-                        <input>
-                        </input>
-                        <label>
-                            Odds
-                        </label>
-                        <input></input>
-                        <input></input>
-                        <button>Add</button>
-                    </form>
+                    <div>
+                        <BetForm></BetForm>
+                    </div>
                 </div>
                 <div>
                     <Paper >
@@ -85,7 +64,7 @@ class BiddingTable extends React.Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {bids.map(row => (
+                                {assignment.placedBets.map(row => (
                                     <TableRow key={row.id}>
                                         <TableCell component="th" scope="row">
                                             {row.id}

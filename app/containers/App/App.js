@@ -10,8 +10,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { Modal } from 'react-modal';
-import HomePage from 'containers/HomePage/Loadable';
-import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import BiddingPage from 'containers/BiddingPage';
 import Header from 'components/Header';
@@ -29,10 +27,7 @@ const App = () => (
     </Helmet>
     <Header />
     <Switch>
-      {/* <Route exact path="/" component={HomePage} /> */}
       <Route exact path="/" component={BiddingPage}/>
-      <Route path="/table" component={BiddingTable}/>
-      {/* <Route path="/features" component={FeaturePage} /> */}
       <Route path="" component={NotFoundPage} />
     </Switch>
 

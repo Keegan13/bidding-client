@@ -1,30 +1,39 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Banner from './images/banner.jpg';
 import './style.scss';
 
-class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  render() {
-    return (
-      <div className="header">
-        {/* <a href="https://twitter.com/flexdinesh">
-          <img src={Banner} alt="react-redux-boilerplate - Logo" />
-        </a> */}
-        <div className="nav-bar">
-          <Link className="router-link" to="/table">
-            Table
-          </Link>
-          <Link className="router-link" to="/">
-            Home
-          </Link>
-          {/*
-          <Link className="router-link" to="/bidding">
-            Bidding
-          </Link>  */}
-        </div>
-      </div>
-    );
-  }
+export const Header = (props) => {
+
+  const { realoadAssignments } = props;
+
+  const onReloadAssignmentsClick = () => {
+    realoadAssignments();
+  };
+  const onAddAssignmentClick = () => {
+
+  };
+
+
+  return (<div className="header">
+    {/* <a href="https://twitter.com/flexdinesh">
+        <img src={Banner} alt="react-redux-boilerplate - Logo" />
+      </a> */}
+    <div className="nav-bar">
+      <Link className="router-link" to="/">
+        Bidding
+        </Link>
+      <a className="router-link" onClick={onReloadAssignmentsClick}>
+        Reload assignments
+      </a>
+      <a className="router-link" onClick={onAddAssignmentClick}>
+        Add assignment
+      </a>
+    </div>
+  </div>
+  );
 }
+
+
+
 
 export default Header;

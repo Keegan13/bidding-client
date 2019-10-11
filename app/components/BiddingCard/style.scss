@@ -3,3 +3,32 @@
     border:2px solid gray;
 
 }
+
+.bidding-card 
+{
+    &:hover{
+        cursor: pointer;
+        box-shadow: gray 0px 0px 5px 5px;
+        border:2px solid white;
+    }
+    display: inline-block;
+    margin:20px;
+    padding:5px;
+    width: 350px;
+    height: 200px;
+    border: 2px solid #321321;
+
+    &.timeout{
+        background-color: hotpink;
+    }
+
+    &.pending{
+        background-color: orange;
+    }
+
+    &.placed{
+        background-color: lightgreen;
+    }
+
+
+}

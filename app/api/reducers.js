@@ -1,24 +1,51 @@
 import * as ApiTypes from './constants';
+import * as BiddingTypes from 'actions/bidding.js';
+import BiddingTable from '../components/BiddingTable/BiddingTable';
 
 const initialState = {
     pending: false,
-    bidData: null,
-    error: null
+    error: null,
+    selectedId: null
 }
 
 function assignmentReducer(state = initialState, action) {
     switch (action.type) {
+        case BiddingTypes.SELECT_ASSIGNMENT:
+            console.log(action.id);
+            return {
+                ...state,
+                selectedId: action.id
+            }
+
+        case BiddingTable.DESELECT_ASSIGNMENT:
+            return {
+                ...state,
+                selectedId: null
+            }
+
         case ApiTypes.SPLIT_BID_PENDING:
             return {
                 ...state,
                 pending: true
             }
         case ApiTypes.SPLIT_BID_SUCCESS:
-            return {
-                ...state,
-                pending: false,
-                bidData: action.payload
+            let { assignments } = state;
+            let index = assignments.findIndex(x => x.id == action.payload.assignmentId);
+
+            if (index != -1) {
+                let targetAssignment = assignments[index];
+                let updated = Object.assign({}, targetAssignment, {
+                    placedBets: [...targetAssignment.placedBets, action.payload]
+                });
+                let arr = [...assignments.slice(0, index > 0 ? index : 0), updated, ...assignments.slice(index + 1)];
+
+                return {
+                    ...state,
+                    assignments: arr,
+                    pending: false
+                }
             }
+            return state;
         case ApiTypes.SPLIT_BID_ERROR:
             return {
                 ...state,
@@ -51,7 +78,7 @@ function assignmentReducer(state = initialState, action) {
                 pending: true
             }
         case ApiTypes.LOAD_ASSIGNMENT_SUCCESS:
-            let newState={
+            let newState = {
                 ...state,
                 pending: false,
                 assignments: [...action.payload]

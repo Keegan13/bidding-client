@@ -1,10 +1,10 @@
 import * as ApiTypes from './actions';
 import api from '.';
 
-export function splitBidThunk({ id, amount, race }) {
+export function splitBidThunk({ assignmentId, volume, odds }) {
     return (dispatch) => {
         dispatch(ApiTypes.splitBidPending());
-        api.addBid(id, amount, race)
+        api.placeBet(assignmentId, volume, odds)
             .then(res => {
                 if (res.error) {
                     throw (res.error);
