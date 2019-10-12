@@ -29,6 +29,9 @@
     &.placed{
         background-color: lightgreen;
     }
+    &.to-be-placed{
+        background-color:blue;
+    }
 
 
 }

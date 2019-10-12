@@ -17,7 +17,8 @@ export default function configureStore(initialState = {}, history) {
   // 2. routerMiddleware: Syncs the location/URL path to the state
   const middlewares = [sagaMiddleware, routerMiddleware(history)];
 
-  const enhancers = [applyMiddleware(...middlewares,logger,thunk)];
+  //const enhancers = [applyMiddleware(...middlewares,logger,thunk)];
+  const enhancers = [applyMiddleware(...middlewares,thunk)];
 
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose
   /* eslint-disable no-underscore-dangle */

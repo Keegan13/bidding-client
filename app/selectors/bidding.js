@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { select } from '@redux-saga/core/effects';
 
 const selectAssignments = (state) => state.assignments;
 
@@ -16,8 +17,8 @@ const makeSelectSelectedAssignment = () => createSelector(
         if (!assignments || !assignments.length > 0 || !selectedId) {
             return null;
         }        
-
-        return assignments.find(x => x.id == selectedId);
+        let item=assignments.find(x => x.id == selectedId);
+        return item;
     }
 );
 

@@ -12,7 +12,6 @@ import fasdf from 'actions';
 class BetForm extends React.Component {
     constructor(props) {
         super(props);
-        console.log(fasdf);
         this.onPlaceBetSubmit = this.onPlaceBetSubmit.bind(this);
     }
 

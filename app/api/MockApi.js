@@ -48,9 +48,6 @@ export const BiddingApi = {
 
 
     generateBet(count, assignmentId) {
-        if (!count) {
-            count = 1;
-        }
         var data = [];
 
         for (var i = 0; i < count; i++) {
@@ -77,10 +74,10 @@ export const BiddingApi = {
                 number: 1,
                 cutterId: faker.random.number({ min: 1, max: 3 }),
                 location: "Kolkata",
-                startDateTime: "2019-02-27T14:30:00",
+                startDateTime: (new Date(Date.now())).toString(),
                 amount: faker.random.number(200000),
-                timeSpan: faker.random.number({ min: 100, max: 250 }) * 1000,
-                placedBets: [...this.generateBet(faker.random.number({ min: 1, max: 5 }),id)],
+                timeSpan: faker.random.number({ min: 100, max: 12000 }) * 1000,
+                placedBets: [...this.generateBet(faker.random.number({ min: 0, max: 4 }), id)],
                 // betRecommendations: [
                 //     {
                 //         source: "L (Pune - on course)",

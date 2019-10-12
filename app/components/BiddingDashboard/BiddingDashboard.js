@@ -66,9 +66,9 @@ export default function BiddingDashboard(props) {
     <div className="bidding-dashboard">
       {
         groupByCutter(assignments).map(x =>
-          <div class="dashboard-column" id={`cutter-${x.key}`}>
+          <div className="dashboard-column" id={`cutter-${x.key}`} key={x.key}>
             <h2 className="cutter-name">Cutter {x.key}</h2>
-            {x.items.map((item, idx) => <BiddingCard item={item} key={idx} onClick={() => handleOpen(item.id)} />)}
+            {x.items.map((item) => <BiddingCard item={item} key={item.id} onClick={() => handleOpen(item.id)} />)}
           </div>
         )
       }

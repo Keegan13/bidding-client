@@ -10,33 +10,27 @@ import { loadAssignmentsThunk } from '../../api/thunks';
 import { Formik } from 'formik';
 import BetForm from './BetForm/BetForm';
 import './style.scss';
+import LoadingIndicator from 'components/LoadingIndicator';
 
 class BiddingTable extends React.Component {
     constructor(props) {
         super(props);
-
         this.onPlaceBetSubmit = this.onPlaceBetSubmit.bind(this);
-    }
-
-    componentDidMount() {
-    }
-
-    shouldComponentUpdate(nextProps,nextState)
-    {
-        return true;
     }
 
     onPlaceBetSubmit() {
 
-    }
-
+    };
     render() {
+        console.log("rendering table");
         const { assignment } = this.props;
-        
+
+
         if (!assignment) {
-            return '';
+            return <LoadingIndicator />;
         }
 
+        console.log(assignment.placedBets.length);
         return (<div className="bidding-container">
             <div>
                 <BiddingCard item={assignment} />

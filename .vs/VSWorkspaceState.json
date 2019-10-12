@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\app",
-    "\\app\\containers",
-    "\\app\\containers\\App\\tests"
+    "\\app\\containers"
   ],
-  "SelectedNode": "\\app\\containers\\HomePage",
+  "SelectedNode": "\\config",
   "PreviewInSolutionExplorer": false
 }
