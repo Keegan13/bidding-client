@@ -8,13 +8,9 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Switch, Route } from 'react-router-dom';
-import { Modal } from 'react-modal';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import BiddingPage from 'containers/BiddingPage';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
-import BiddingTable from 'components/BiddingTable';
 import './style.scss';
 
 const App = () => (
@@ -26,14 +22,7 @@ const App = () => (
       <meta name="description" content="A React.js Boilerplate application" />
     </Helmet>
     <Header />
-    <Switch>
-      <Route exact path="/" component={BiddingPage}/>
-      <Route path="" component={NotFoundPage} />
-    </Switch>
-
-    {/* <Modal>
-
-    </Modal> */}
+    <BiddingPage />
     <Footer />
   </div>
 );

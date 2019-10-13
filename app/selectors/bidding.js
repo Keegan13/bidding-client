@@ -1,29 +1,40 @@
 import { createSelector } from 'reselect';
-import { select } from '@redux-saga/core/effects';
+import { convertToErrorAction } from 'api/helpers';
 
-const selectAssignments = (state) => state.assignments;
+const selectBidding = (state) => state.bidding;
 
 const makeSelectAssignments = () => createSelector(
-    selectAssignments,
-    (assignments) => assignments.assignments
+    selectBidding,
+    (biddingSection) => biddingSection.assignments
 );
 
 const makeSelectSelectedAssignment = () => createSelector(
-    selectAssignments,
-    (assignmentsSection) => {
-        let assignments = assignmentsSection.assignments;
-        const { selectedId } = assignmentsSection;
+    selectBidding,
+    (biddingSection) => {
+        let assignments = biddingSection.assignments;
+        const { selectedId } = biddingSection;
 
         if (!assignments || !assignments.length > 0 || !selectedId) {
             return null;
-        }        
-        let item=assignments.find(x => x.id == selectedId);
+        }
+        let item = assignments.find(x => x.id == selectedId);
         return item;
     }
 );
 
+const makeSelectError = (actionType) => createSelector(
+    selectBidding,
+    (biddingSection) => {
+        let errorField = convertToErrorAction(actionType);
+        return biddingSection[errorField];
+    }
+);
+
+
+
 export {
-    selectAssignments,
+    selectBidding,
+    makeSelectError,
     makeSelectAssignments,
     makeSelectSelectedAssignment
 };

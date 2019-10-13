@@ -3,20 +3,19 @@
  */
 
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
-import apiReducer from './api/reducers';
-import history from 'utils/history';
+//import { connectRouter } from 'connected-react-router';
+import biddingReducer from './reducers/bidding';
+//import history from 'utils/history';
 import globalReducer from 'containers/App/reducer';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
  */
 export default function createReducer(injectedReducers = {}) {
- 
+
   const rootReducer = combineReducers({
     global: globalReducer,
-    assignments: apiReducer,
-    router: connectRouter(history),
+    bidding: biddingReducer,
     ...injectedReducers,
   });
 

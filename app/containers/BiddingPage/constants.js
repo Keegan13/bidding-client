@@ -1,1 +1,1 @@
-export const MY_ACTION='MY_ACTION';
+export const SELECT_ASSIGNMENT = 'SELECT_ASSIGNMENT';

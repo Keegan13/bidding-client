@@ -1,4 +1,5 @@
 import * as faker from 'faker';
+import * as _ from 'lodash';
 import { addComment } from '@babel/types';
 
 
@@ -18,6 +19,15 @@ export const BiddingApi = {
         return promise;
     },
 
+    /**
+     * Calls 'place bet' api endpoint
+     * 
+     * @param {string|number} assignmentId - id of assignment
+     * @param {number} volume - money amount
+     * @param {string|number} odds - win chances
+     * 
+     * @return {Promise} - promise with assignments or error
+     */
     placeBet(assignmentId, volume, odds) {
         var data = {
             id: faker.random.number(10000),
@@ -63,6 +73,7 @@ export const BiddingApi = {
         return data
     },
 
+
     loadAssignments() {
 
         var data = [];
@@ -76,7 +87,7 @@ export const BiddingApi = {
                 location: "Kolkata",
                 startDateTime: (new Date(Date.now())).toString(),
                 amount: faker.random.number(200000),
-                timeSpan: faker.random.number({ min: 100, max: 12000 }) * 1000,
+                timeSpan: faker.random.number({ min: 10, max: 220 }) * 1000,
                 placedBets: [...this.generateBet(faker.random.number({ min: 0, max: 4 }), id)],
                 // betRecommendations: [
                 //     {
@@ -100,5 +111,43 @@ export const BiddingApi = {
         }
 
         return this.getPromise(data);
+    },
+
+    loadAssignment(id) {
+        if (_.isNil(id)) {
+            id = faker.random.number(31231);
+        }
+        let data = {
+            id,
+            number: 1,
+            cutterId: faker.random.number({ min: 1, max: 3 }),
+            location: "Kolkata",
+            startDateTime: (new Date(Date.now())).toString(),
+            amount: faker.random.number(200000),
+            timeSpan: faker.random.number({ min: 10, max: 220 }) * 1000,
+            placedBets: [...this.generateBet(faker.random.number({ min: 0, max: 4 }), id)],
+            // betRecommendations: [
+            //     {
+            //         source: "L (Pune - on course)",
+            //         betType: "FixedOddsWins",
+            //         transactions: [
+            //             {
+            //                 transactionsId: `trans${faker.random.number(2000)}`,
+            //                 accountId: faker.random.number(100000),
+            //                 hourse: faker.name.firstName(),
+            //                 runnerNo: faker.random.number(36),
+            //                 odds: 1.2,
+            //                 stake: faker.random.number(1000) * 1000,
+            //                 timestamp: Date.now.toString(),
+            //                 timeout: faker.random.number(200)
+            //             }
+            //         ]
+            //     }
+            // ]
+        };
+
+        return this.getPromise(data);
     }
 }
+
+export default BiddingApi;

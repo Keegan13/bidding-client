@@ -3,11 +3,11 @@ import { Formik, Field } from 'formik';
 import { connect } from 'react-redux';
 import { compose, bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { splitBidThunk } from './../../../api/thunks';
-
+import { placeBetThunk } from 'api/thunks';
+import { makeSelectError as makeSelectForApiError } from 'selectors/bidding';
 import { makeSelectLoading, makeSelectError } from './../../../containers/App/selectors';
-import { makeSelectSelectedAssignment } from  'selectors/bidding';
-import fasdf from 'actions';
+import { makeSelectSelectedAssignment } from 'selectors/bidding';
+import { API_ACTION_TYPES } from 'api/constants';
 
 class BetForm extends React.Component {
     constructor(props) {
@@ -29,8 +29,8 @@ class BetForm extends React.Component {
         }
 
         return {
-            p: Math.round(_p*10)/10,
-            q: Math.round(_q*10)/10
+            p: Math.round(_p * 10) / 10,
+            q: Math.round(_q * 10) / 10
         }
     }
 
@@ -38,13 +38,7 @@ class BetForm extends React.Component {
         const { splitBidAction, assignment } = this.props;
         let odds = this.parseOdds(values.leftodds, values.rightodds);
 
-        var input = {
-            assignmentId: assignment.id,
-            volume: values.volume,
-            odds: `${odds.p} : ${odds.q}`
-        };
-
-        splitBidAction(input);
+        splitBidAction(assignment.id,values.volume,`${odds.p} : ${odds.q}`);
     }
 
     render() {
@@ -82,14 +76,13 @@ class BetForm extends React.Component {
 
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    splitBidAction: splitBidThunk,
+    splitBidAction: placeBetThunk,
 }, dispatch)
-
 
 
 const mapStateToProps = createStructuredSelector({
     loading: makeSelectLoading(),
-    error: makeSelectError(),
+    error: makeSelectForApiError(API_ACTION_TYPES.SPLIT_BID_ERROR),
     assignment: makeSelectSelectedAssignment()
 });
 

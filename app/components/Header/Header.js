@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './style.scss';
 
 export const Header = (props) => {
@@ -19,9 +18,6 @@ export const Header = (props) => {
         <img src={Banner} alt="react-redux-boilerplate - Logo" />
       </a> */}
     <div className="nav-bar">
-      <Link className="router-link" to="/">
-        Bidding
-        </Link>
       <a className="router-link" onClick={onReloadAssignmentsClick}>
         Reload assignments
       </a>
@@ -32,8 +28,5 @@ export const Header = (props) => {
   </div>
   );
 }
-
-
-
 
 export default Header;

@@ -6,24 +6,23 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { loadAssignmentsThunk } from '../../api/thunks';
-import { Formik } from 'formik';
 import BetForm from './BetForm/BetForm';
-import './style.scss';
 import LoadingIndicator from 'components/LoadingIndicator';
+import './style.scss';
 
+
+/**
+ * @todo change to functional component
+ */
 class BiddingTable extends React.Component {
     constructor(props) {
         super(props);
-        this.onPlaceBetSubmit = this.onPlaceBetSubmit.bind(this);
+
     }
 
-    onPlaceBetSubmit() {
-
-    };
     render() {
         console.log("rendering table");
-        const { assignment } = this.props;
+        const { assignment, reloadAssignment } = this.props;
 
 
         if (!assignment) {
@@ -32,12 +31,13 @@ class BiddingTable extends React.Component {
 
         console.log(assignment.placedBets.length);
         return (<div className="bidding-container">
-            <div>
+            <div className="">
                 <BiddingCard item={assignment} />
                 <div>
                     <p>Comments</p>
                     <textarea className="feedback-area"></textarea>
                 </div>
+                <button className="btn btn-primary" onClick={() => reloadAssignment(assignment.id)}>Reload</button>
 
             </div>
             <div>
@@ -52,7 +52,7 @@ class BiddingTable extends React.Component {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Id</TableCell>
-                                    <TableCell align="right">Volumne</TableCell>
+                                    <TableCell align="right">Volume</TableCell>
                                     <TableCell align="right">Odds</TableCell>
                                     <TableCell align="right">Bookmaker</TableCell>
                                 </TableRow>

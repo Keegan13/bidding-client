@@ -1,1 +1,5 @@
-export { BiddingApi as  default } from './MockApi';
+
+/**
+ * @todo replace with actual api instead of mock
+ */
+export { default  } from './MockApi';

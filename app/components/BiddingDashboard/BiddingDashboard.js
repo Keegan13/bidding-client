@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import BiddingTable from 'components/BiddingTable';
 import BiddingCard from 'components/BiddingCard';
-import * as _ from 'underscore';
+import * as _ from 'lodash';
 import './styles.scss';
 import { selectAssignment } from 'actions/bidding';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
-import BiddingSummary from '../BiddingSummary/BIddingSummary';
+import BiddingSummary from '../BiddingSummary/BiddingSummary';
 
 const groupByCutter = (assignments) => {
   var grouping = [];
