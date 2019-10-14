@@ -6,9 +6,11 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createReducer from './reducers';
 import logger from 'redux-logger'
 import thunk from 'redux-thunk';
+import connection from 'live';
+import { hubNewAssignment } from 'live/actions';
 
 export default function configureStore(initialState = {}) {
-  const middleware = [logger,thunk];
+  const middleware = [logger, thunk];
   const enhancers = [applyMiddleware(...middleware)];
 
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose

@@ -7,6 +7,7 @@ import { selectAssignment } from 'actions/bidding';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import BiddingSummary from '../BiddingSummary/BiddingSummary';
+import moment from 'moment';
 
 const groupByCutter = (assignments) => {
   var grouping = [];
@@ -14,7 +15,11 @@ const groupByCutter = (assignments) => {
   Object.keys(groupObject).forEach(function (prop) {
     grouping.push({
       key: prop,
-      items: groupObject[prop]
+      items: _.orderBy(groupObject[prop], (item) => {
+        let left = moment(item.startDateTime).valueOf() - Date.now() + item.timeSpan;
+        //ToDo: fix this
+        return left > 0 ? left : 100000;
+      })
     })
   });
 
@@ -32,7 +37,8 @@ function getModalStyle() {
 const useStyles = makeStyles(theme => ({
   paper: {
     position: 'absolute',
-    width: 800,
+    width: 'auto',
+    height: 'auto',
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -73,8 +79,6 @@ export default function BiddingDashboard(props) {
         )
       }
       <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
         open={open}
         onClose={handleClose}>
         <div style={modalStyle} className={classes.paper}>

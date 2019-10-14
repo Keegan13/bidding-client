@@ -9,10 +9,12 @@ import {
 import { splitBidThunk } from 'api/thunks';
 import { makeSelectAssignments, makeSelectSelectedAssignment } from 'selectors/bidding';
 import { loadAssignmentsThunk } from 'api/thunks';
+import { connectToHubThunk } from 'live/thunks';
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     splitBidAction: splitBidThunk,
-    loadAssignments: loadAssignmentsThunk
+    loadAssignments: loadAssignmentsThunk,
+    connectToHub: connectToHubThunk
 }, dispatch)
 
 const mapStateToProps = createStructuredSelector({

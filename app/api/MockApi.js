@@ -1,24 +1,23 @@
 import * as faker from 'faker';
 import * as _ from 'lodash';
-import { addComment } from '@babel/types';
+import { generateAssignments,generateAssignment } from './../utils/mocks';
+
+function createPromise(data) {
+
+    let promise = new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            if (faker.random.number(10) % 9 == 0) {
+                reject("error")
+            } else {
+                resolve(data);
+            }
+        }, faker.random.number(500));
+    });
+    return promise;
+};
 
 
 export const BiddingApi = {
-
-    getPromise(data) {
-
-        let promise = new Promise(function (resolve, reject) {
-            setTimeout(function () {
-                if (faker.random.number(10) % 9 == 0) {
-                    reject("error")
-                } else {
-                    resolve(data);
-                }
-            }, faker.random.number(500));
-        });
-        return promise;
-    },
-
     /**
      * Calls 'place bet' api endpoint
      * 
@@ -42,7 +41,7 @@ export const BiddingApi = {
             bookmaker: `${faker.name.firstName()} ${faker.name.lastName()}`
         })
 
-        return this.getPromise(response);
+        return createPromise(response);
     },
 
     addComment(bidId, text) {
@@ -53,100 +52,15 @@ export const BiddingApi = {
             authorName: `${faker.name.firstName()} ${faker.name.lastName()}`
         };
 
-        return this.getPromise(data);
+        return createPromise(data);
     },
-
-
-    generateBet(count, assignmentId) {
-        var data = [];
-
-        for (var i = 0; i < count; i++) {
-            data.push({
-                id: faker.random.number(1000000),
-                volume: faker.random.number({ min: 100, max: 30000 }),
-                assignmentId,
-                odds: `1.${faker.random.number(9)} : 1`,
-                bookmaker: `${faker.name.firstName()} ${faker.name.lastName()}`
-            })
-        }
-
-        return data
-    },
-
 
     loadAssignments() {
-
-        var data = [];
-        let length = faker.random.number({ min: 5, max: 11 });
-        for (var i = 0; i < length; i++) {
-            var id = faker.random.number(3123);
-            data.push({
-                id,
-                number: 1,
-                cutterId: faker.random.number({ min: 1, max: 3 }),
-                location: "Kolkata",
-                startDateTime: (new Date(Date.now())).toString(),
-                amount: faker.random.number(200000),
-                timeSpan: faker.random.number({ min: 10, max: 220 }) * 1000,
-                placedBets: [...this.generateBet(faker.random.number({ min: 0, max: 4 }), id)],
-                // betRecommendations: [
-                //     {
-                //         source: "L (Pune - on course)",
-                //         betType: "FixedOddsWins",
-                //         transactions: [
-                //             {
-                //                 transactionsId: `trans${faker.random.number(2000)}`,
-                //                 accountId: faker.random.number(100000),
-                //                 hourse: faker.name.firstName(),
-                //                 runnerNo: faker.random.number(36),
-                //                 odds: 1.2,
-                //                 stake: faker.random.number(1000) * 1000,
-                //                 timestamp: Date.now.toString(),
-                //                 timeout: faker.random.number(200)
-                //             }
-                //         ]
-                //     }
-                // ]
-            });
-        }
-
-        return this.getPromise(data);
+        return createPromise(generateAssignments());
     },
 
     loadAssignment(id) {
-        if (_.isNil(id)) {
-            id = faker.random.number(31231);
-        }
-        let data = {
-            id,
-            number: 1,
-            cutterId: faker.random.number({ min: 1, max: 3 }),
-            location: "Kolkata",
-            startDateTime: (new Date(Date.now())).toString(),
-            amount: faker.random.number(200000),
-            timeSpan: faker.random.number({ min: 10, max: 220 }) * 1000,
-            placedBets: [...this.generateBet(faker.random.number({ min: 0, max: 4 }), id)],
-            // betRecommendations: [
-            //     {
-            //         source: "L (Pune - on course)",
-            //         betType: "FixedOddsWins",
-            //         transactions: [
-            //             {
-            //                 transactionsId: `trans${faker.random.number(2000)}`,
-            //                 accountId: faker.random.number(100000),
-            //                 hourse: faker.name.firstName(),
-            //                 runnerNo: faker.random.number(36),
-            //                 odds: 1.2,
-            //                 stake: faker.random.number(1000) * 1000,
-            //                 timestamp: Date.now.toString(),
-            //                 timeout: faker.random.number(200)
-            //             }
-            //         ]
-            //     }
-            // ]
-        };
-
-        return this.getPromise(data);
+        return createPromise(generateAssignment(id));
     }
 }
 

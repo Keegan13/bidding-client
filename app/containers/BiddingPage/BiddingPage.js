@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import BiddingDashboard from '../../components/BiddingDashboard';
-import  BiddingSummary  from 'components/BiddingSummary';
+import BiddingSummary from 'components/BiddingSummary';
 import './style.scss';
 
 export default class BiddingPage extends React.Component {
@@ -10,22 +10,22 @@ export default class BiddingPage extends React.Component {
   }
 
   componentDidMount() {
-    const { loadAssignments } = this.props;
+    const { loadAssignments, connectToHub } = this.props;
     loadAssignments();
+    connectToHub();
   }
-  shouldComponentUpdate(){
+  shouldComponentUpdate() {
 
     return true;
   }
 
   render() {
     const { assignment, assignments } = this.props;
-    const { onCallMyAction, myValue } = this.props;
-
     return (
       <div className="bidding-page">
         <BiddingSummary assignments={assignments} />
         <BiddingDashboard />
+        {/* <Notification /> */}
       </div>
     );
   }

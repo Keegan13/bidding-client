@@ -61,17 +61,17 @@ const BiddingSummary = (props) => {
 
     return (<div style={{ display: 'flex', flexDirection: 'row', padding: '10px', alignItems: 'stretch' }}>
         <Card className={classes.toBePlaced}>
-            <Typography variant="h1" component="p" style={{ padding: '20px' }}>
+            <Typography variant="h4" component="p" style={{ padding: '20px' }}>
                 To Be Placed: ${stats.toBePlaced}
             </Typography>
         </Card>
         <Card className={classes.pending}>
-            <Typography variant="h1" component="p" style={{ padding: '20px' }}>
+            <Typography variant="h4" component="p" style={{ padding: '20px' }}>
                 Pending: ${stats.pending}
             </Typography>
         </Card>
         <Card className={classes.placed}>
-            <Typography variant="h1" style={{ padding: '20px' }} component="p">
+            <Typography variant="h4" style={{ padding: '20px' }} component="p">
                 Placed: ${stats.placed}
             </Typography>
         </Card>
