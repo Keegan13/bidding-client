@@ -23,7 +23,7 @@ const mockConnection = {
             if (faker.random.number(50) % 27 == 0) {
                 throw new Error("Random error occurred");
             }
-
+  
             resolve(this);
         });
 

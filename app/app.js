@@ -61,9 +61,3 @@ if (module.hot) {
 }
 
 render();
-
-connection.start();
-connection.on("assignment-received", function (assignment) {
-  hubNewAssignment(assignment);
-});
-

@@ -7,7 +7,7 @@ import { makeSelectError as makeSelectForApiError } from 'selectors/bidding';
 import { makeSelectLoading } from 'containers/App/selectors';
 import { makeSelectSelectedAssignment } from 'selectors/bidding';
 import { API_ACTION_TYPES } from 'api/constants';
-import './styles.scss';
+
 
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
