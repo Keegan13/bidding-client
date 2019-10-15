@@ -11,7 +11,7 @@ export default class BiddingPage extends React.Component {
 
   componentDidMount() {
     const { loadAssignments, connectToHub } = this.props;
-    loadAssignments();
+    //loadAssignments();
     connectToHub();
   }
   shouldComponentUpdate() {

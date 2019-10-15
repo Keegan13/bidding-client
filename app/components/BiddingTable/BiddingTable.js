@@ -3,6 +3,7 @@ import BiddingCard from 'components/BiddingCard';
 import BetForm from './BetForm';
 import LoadingIndicator from 'components/LoadingIndicator';
 import BetTable from './BetTable';
+import StatusSwitch from './StatusSwitch';
 import './style.scss';
 
 const getAmountLeft = (assignment) => {
@@ -20,13 +21,14 @@ class BiddingTable extends React.Component {
     }
 
     render() {
-        const { assignment, reloadAssignment } = this.props;
+        const { assignment, reloadAssignment, setStatus } = this.props;
         if (!assignment) {
             return <LoadingIndicator />;
         }
         return (<div className="bidding-container">
             <div className="">
-                <BiddingCard item={assignment} />
+                <BiddingCard assignment={assignment} />
+                <StatusSwitch assignment={assignment} onStatusChange={({ assignmentId, status }) => setStatus(assignmentId, status)} />
                 <div>
                     <p>Comments</p>
                     <textarea className="feedback-area"></textarea>

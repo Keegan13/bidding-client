@@ -8,7 +8,7 @@ const mockConnection = {
         const loop = (() => {
             let rand = faker.random.number({ min: 20, max: 60 }) * 1000;
             setTimeout(() => {
-                const newAssignment = generateAssignment();
+                const newAssignment = generateAssignment(null,'new');
                 console.log('generated new assignment with id ' + newAssignment.id);
                 this.callBacks.forEach((cb) => {
                     cb.call(null, newAssignment);

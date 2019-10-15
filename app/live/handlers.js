@@ -19,6 +19,8 @@ export const HubHandlers = {
             };
         }
 
+        receivedAssignment.receivedDate = (new Date(Date.now())).toString();
+
         return { ...state, assignments: [...assignments, receivedAssignment] }
     },
     [HUB_CONNECTION_ESTABLISHED]: (state, action) => {

@@ -9,6 +9,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import NumberFormat from 'react-number-format';
 import MaskedInput from 'react-text-mask';
+import { Form, Control } from 'react-redux-form';
+import { useForm, useField, splitFormProps } from "react-form";
 import './styles.scss';
 
 function parseOdds(p, q) {
@@ -48,73 +50,61 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-// function TextMaskCustom(props) {
-//     const { inputRef, ...other } = props;
+const validateOdds = ({ placed, win }) => {
 
-//     return (
-//         <MaskedInput
-//             {...other}
-//             ref={ref => {
-//                 inputRef(ref ? ref.inputElement : null);
-//             }}
-//             mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
-//             placeholderChar={'\u2000'}
-//             showMask
-//         />
-//     );
-// }
+    return true;
+};
 
-// TextMaskCustom.propTypes = {
-//     inputRef: PropTypes.func.isRequired,
-// };
+const getAmountLeft = (assignment) => {
+    let placed = assignment.placedBets.reduce((agg, next) => agg += next.volume, 0);
+    let left = assignment.amount - placed;
 
-// function NumberFormatCustom(props) {
-//     const { inputRef, onChange, ...other } = props;
-
-//     return (
-//         <NumberFormat
-//             {...other}
-//             getInputRef={inputRef}
-//             onValueChange={values => {
-//                 onChange({
-//                     target: {
-//                         value: values.value,
-//                     },
-//                 });
-//             }}
-//             thousandSeparator
-//             isNumericString
-//             prefix="$"
-//         />
-//     );
-// }
-
-// NumberFormatCustom.propTypes = {
-//     inputRef: PropTypes.func.isRequired,
-//     onChange: PropTypes.func.isRequired,
-// };
-
-
+    return left > 0 ? left : 0;
+};
 
 const BetForm = (props) => {
     const classes = useStyles();
-
-
     const { placeBet, assignment } = props;
-
     const [getState, setState] = useState({
         volume: '', placed: '', win: ''
     });
 
-    const getAmountLeft = (assignment) => {
-        let placed = assignment.placedBets.reduce((agg, next) => agg += next.volume, 0);
-        let left = assignment.amount - placed;
-
-        return left > 0 ? left : 0;
+    const required = {
+        isValid: (value) => !_.isNil(value),
+        errorMessage: "Field is required"
+    };
+    const volumeValidator = {
+        isValid: ({ volume }) => {
+            let left = assignment.amount - assignment.placedBets.reduce((agg, next) => agg += next.volume, 0);
+            return left >= volume;
+        },
+        errorMessage: "Volume is not valid!!"
     };
 
+    const validators = {
+        '': { validateOdds },
+        volume: { required, isVolumeValid: volumeValidator },
+        placed: { required },
+        win: { required }
+    };
+
+
     const handleChange = name => event => {
-        setState({ ...getState, [name]: event.target.value });
+
+        _.values(validators[name]).forEach(val=>)
+        if (.reduce((agg, val) => {
+            if (val.call(null, getState)) {
+                agg.isValid = true;
+            }
+            else {
+                agg.errors.push();
+            }
+        }),
+            {
+                isValid: true,
+                errors: []
+            })
+            setState({ ...getState, [name]: event.target.value });
     };
 
     const onPlaceBetSubmit = () => {
@@ -128,61 +118,29 @@ const BetForm = (props) => {
 
     };
 
+    const handleSubmitFailed = (form) => {
+
+        throw new Error("Function not implemented!");
+    };
+
+
     const onPlaceAllClick = () => {
         setState({ volume: getAmountLeft(assignment) });
     };
 
+    const required = str => !_.isNil(str);
+
+
+
     return (
         <div className="place-bet-form">
-            <div className={classes.container}>
-                <TextField
-                    className={classes.formControl}
-                    label="Volume"
-                    value={getState.volume}
-                    onChange={handleChange('volume')}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    edge="end"
-                                    aria-label="Place everything left"
-                                    onClick={onPlaceAllClick}
-                                >
-                                    <AddIcon />
-                                </IconButton>
-                            </InputAdornment>
-                        )
-                    }}
-                />
-            </div>
-
-
-
-            <div className={classes.container}>
-                <TextField
-                    className={classes.formControl+" "+classes.formOdds}
-                    label="Placed"
-                    value={getState.placed}
-                    onChange={handleChange('placed')}
-                    type="number"
-                /></div>
-            <div className={classes.container}>
-                <TextField
-                    className={classes.formControl+" "+classes.formOdds}
-                    label="Win"
-                    value={getState.win}
-                    onChange={handleChange('win')}
-                    type="number"
-                />
-            </div>
-            <Button
-                onClick={onPlaceBetSubmit}
-                className={classes.submitButton}
-                color="primary"
-                variant="contained"
-            >
-                Add
-      </Button>
+            <label >Volume</label>
+            <input name="volume" value={getState.volume} onChange={handleChange('volume')} />
+            <label >Odds</label>
+            <input name="placed" value={getState.placed} onChange={handleChange('placed')} />
+            <span>-</span>
+            <input name="win" value={getState.win} onChange={handleChange('win')} />
+            <button type="button" onClick={onPlaceBetSubmit}>Add</button>
         </div>
     )
 };

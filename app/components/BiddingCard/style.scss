@@ -17,7 +17,9 @@
   border: 2px solid #321321;
 
   &.timeout {
-    background-color: hotpink;
+    &:after {
+      content: "";
+    }
   }
 
   &.pending {
@@ -31,11 +33,15 @@
     background-color: lightskyblue;
   }
 
+  &.error {
+    background-color: hotpink;
+  }
+
   .countdown-text {
     position: absolute;
     top: 0px;
     right: 0px;
-    padding:10px;
+    padding: 10px;
     font-weight: 600;
   }
 }

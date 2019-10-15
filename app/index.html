@@ -1,23 +1,137 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- The first thing in any HTML file should be the charset -->
-    <meta charset="utf-8">
 
-    <!-- Make the page mobile compatible -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <!-- The first thing in any HTML file should be the charset -->
+  <meta charset="utf-8">
 
-    <link rel="icon" href="/favicon.ico" />
-    <title>Hourse riding</title>
-  </head>
-  <body>
-    <!-- Display a message if JS has been disabled on the browser. -->
-    <noscript>If you're seeing this message, that means <strong>JavaScript has been disabled on your browser</strong>, please <strong>enable JS</strong> to make this app work.</noscript>
-    <link>
-    <!-- The app hooks into this div -->
-    <div id="app"></div>
-    <!-- Open Sans Font -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-    <!-- A lot of magic happens in this file. HtmlWebpackPlugin automatically includes all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this HTML file. Don't add any assets here! (Check out the webpack config files in config/webpack for details) -->
-  </body>
+  <!-- Make the page mobile compatible -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" href="/favicon.ico" />
+  <title>Hourse riding</title>
+</head>
+
+<body>
+  <!-- Display a message if JS has been disabled on the browser. -->
+  <noscript>If you're seeing this message, that means <strong>JavaScript has been disabled on your browser</strong>,
+    please <strong>enable JS</strong> to make this app work.</noscript>
+  <link>
+  <script>
+    (function (w) {
+      w.assignments = [
+        {
+          "id": 959326,
+          "number": 1,
+          "cutterId": 3,
+          "location": "South Audiefurt",
+          "startDateTime": "Tue Oct 15 2019 12:58:49 GMT+0300 (Eastern European Summer Time)",
+          "amount": 5000,
+          "timeSpan": 620000000,
+          "placedBets": [
+            {
+              "id": 379112,
+              "volume": 3000,
+              "assignmentId": 959326,
+              "odds": "1.2 : 1",
+              "bookmaker": "Zoe Jacobs"
+            }
+          ]
+        },
+        {
+          "id": 637115,
+          "number": 1,
+          "cutterId": 2,
+          "location": "Port Mazie",
+          "startDateTime": "Tue Oct 15 2019 12:58:49 GMT+0300 (Eastern European Summer Time)",
+          "amount": 28000,
+          "timeSpan": 7000000,
+          "placedBets": [
+            {
+              "id": 73965,
+              "volume": 6000,
+              "assignmentId": 637115,
+              "odds": "1.5 : 1",
+              "bookmaker": "Elinore Corwin"
+            },
+            {
+              "id": 926344,
+              "volume": 20000,
+              "assignmentId": 637115,
+              "odds": "1.7 : 1",
+              "bookmaker": "Lilla Ebert"
+            }
+          ]
+        },
+        {
+          "id": 861658,
+          "number": 1,
+          "cutterId": 1,
+          "location": "Evansbury",
+          "startDateTime": "Tue Oct 15 2019 12:58:49 GMT+0300 (Eastern European Summer Time)",
+          "amount": 55000,
+          "timeSpan": 84000000,
+          "placedBets": [
+            {
+              "id": 45136,
+              "volume": 22000,
+              "assignmentId": 861658,
+              "odds": "1.0 : 1",
+              "bookmaker": "Celine Braun"
+            },
+            {
+              "id": 819970,
+              "volume": 24000,
+              "assignmentId": 861658,
+              "odds": "1.3 : 1",
+              "bookmaker": "Luella Zemlak"
+            }
+          ]
+        },
+        {
+          "id": 159322,
+          "number": 1,
+          "cutterId": 2,
+          "location": "Littelfort",
+          "startDateTime": "Tue Oct 15 2019 12:58:49 GMT+0300 (Eastern European Summer Time)",
+          "amount": 8000,
+          "timeSpan": 6400000,
+          "placedBets": []
+        },
+        {
+          "id": 589030,
+          "number": 1,
+          "cutterId": 1,
+          "location": "New Laura",
+          "startDateTime": "Tue Oct 15 2019 12:58:49 GMT+0300 (Eastern European Summer Time)",
+          "amount": 19000,
+          "timeSpan": 128000000,
+          "placedBets": [
+            {
+              "id": 627392,
+              "volume": 9000,
+              "assignmentId": 589030,
+              "odds": "1.4 : 1",
+              "bookmaker": "Rhiannon Schmeler"
+            },
+            {
+              "id": 12066,
+              "volume": 1000,
+              "assignmentId": 589030,
+              "odds": "1.1 : 1",
+              "bookmaker": "Edd Reichert"
+            }
+          ]
+        }
+      ];
+    })(window);
+  </script>
+
+  <!-- The app hooks into this div -->
+  <div id="app"></div>
+  <!-- Open Sans Font -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+  <!-- A lot of magic happens in this file. HtmlWebpackPlugin automatically includes all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this HTML file. Don't add any assets here! (Check out the webpack config files in config/webpack for details) -->
+</body>
+
 </html>

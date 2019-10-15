@@ -7,12 +7,14 @@ import moment from 'moment';
 import Countdown from 'react-countdown-now';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import LoadingIndicator from 'components/LoadingIndicator';
+import { ASSIGNMENT_STATUSES } from 'models';
 
 const STATUSES = {
   pending: "pending",
   placed: "placed",
   timeout: "timeout",
-  toBePlaced: "to-be-placed"
+  toBePlaced: "to-be-placed",
+  error: "error"
 };
 
 const BorderLinearProgress = withStyles({
@@ -34,23 +36,30 @@ const getAssignmentProgress = (assignment) => {
   return progress > 100 ? 100 : progress;
 };
 
+const isTimeOut = (ass) => {
+  let endTicks = moment(ass.startDateTime).valueOf() + ass.timeSpan;
+  let nowTicks = Date.now();
+  return nowTicks >= endTicks ? true : false;
+};
+
+
 const getStatusClass = (assignment) => {
-  const isTimeOut = (ass) => {
-    let endTicks = moment(ass.startDateTime).valueOf() + ass.timeSpan;
-    let nowTicks = Date.now();
 
-    return nowTicks >= endTicks ? true : false;
-  };
+  const isError = (ass) => ass.status === ASSIGNMENT_STATUSES.ERROR ? true : false;
 
-  const isPlaced = (ass) => ass.placedBets.reduce((agg, next) => agg += next.volume, 0) >= ass.amount ? true : false;
-  const isNew = (ass) => !ass.placedBets || ass.placedBets.length == 0 ? true : false;
+  const isPlaced = (ass) => ass.status === ASSIGNMENT_STATUSES.PLACED || ass.placedBets.reduce((agg, next) => agg += next.volume, 0) >= ass.amount ? true : false;
+  const isToBePlaced = (ass) => ass.status === ASSIGNMENT_STATUSES.TO_BE_PLACED || !ass.placedBets || ass.placedBets.length == 0 ? true : false;
+  const isPending = (ass) => ass.status === ASSIGNMENT_STATUSES.PENDING ? true : false;
 
 
-  if (isTimeOut(assignment)) {
-    return STATUSES.timeout;
+  if (isError(assignment)) {
+    return STATUSES.error;
   }
 
-  if (isNew(assignment)) {
+  if (isPending(assignment)) {
+    return STATUSES.pending;
+  }
+  if (isToBePlaced(assignment)) {
     return STATUSES.toBePlaced;
   }
 
@@ -62,19 +71,19 @@ const getStatusClass = (assignment) => {
 };
 
 const BiddingCard = (props) => {
-  const { item } = props;
+  const { assignment } = props;
 
-  if (!item) {
+  if (!assignment) {
     return <LoadingIndicator />;
   }
 
-  const [status, setStatus] = useState(getStatusClass(item));
-  const [progress, setProgress] = useState(getAssignmentProgress(item));
+  const [status, setStatus] = useState(getStatusClass(assignment));
+  const [progress, setProgress] = useState(getAssignmentProgress(assignment));
 
   useEffect(() => {
-    setStatus(getStatusClass(item));
-    setProgress(getAssignmentProgress(item));
-  }, [item]);
+    setStatus(getStatusClass(assignment));
+    setProgress(getAssignmentProgress(assignment));
+  }, [assignment]);
 
   const onCountdownCompleteHandler = (value) => {
     if (value.completed) {
@@ -85,7 +94,7 @@ const BiddingCard = (props) => {
   const countDownRenderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
       // Render a completed state
-      return "";//<span>DONE</span>
+      return <span className="countdown-text">Timeout!</span>;//<span>DONE</span>
       // switch (status) {
       //   case STATUSES.pending: return <span className={"bidding-status " + status}></span>
       //   case STATUSES.placed: return <span className={"bidding-status " + status}></span>
@@ -99,18 +108,24 @@ const BiddingCard = (props) => {
     }
   };
 
-  return (<Card className={`bidding-card ${status}`} {...props}>
-    <h4>{item.location}</h4>
+  return (<Card className={`bidding-card ${status} ${isTimeOut(assignment)}`} {...props}>
+    <h4>{assignment.location}</h4>
     <Countdown
-      date={moment(item.startDateTime).valueOf() + item.timeSpan}
+      date={moment(assignment.startDateTime).valueOf() + assignment.timeSpan}
       renderer={countDownRenderer}
       // controlled={true}
       onComplete={onCountdownCompleteHandler}
     />
     <p>
-      Init {moment(item.startDateTime).format("YYYY-MM-DD hh:mm:ss")}
-      Deadline {moment(item.startDateTime).add(item.timeSpan, 'milliseconds').format("hh:mm:ss")}
-      Amount: {item.amount}
+      Init {moment(assignment.startDateTime).format("YYYY-MM-DD hh:mm:ss")}
+      Deadline {moment(assignment.startDateTime).add(assignment.timeSpan, 'milliseconds').format("hh:mm:ss")}
+      <br />
+
+      Amount: {assignment.amount}
+
+    </p>
+    <p>
+      Received: {moment(assignment.receivedDate).format("MM-DD hh:mm:ss")}
     </p>
     <BorderLinearProgress
       variant="determinate"

@@ -17,7 +17,7 @@ export function generateBets(count, assignmentId) {
     return data
 };
 
-export function generateAssignment(id) {
+export function generateAssignment(id, status) {
     if (_.isNil(id)) {
         id = faker.random.number(1000000);
     }
@@ -33,6 +33,10 @@ export function generateAssignment(id) {
         placedBets: [...generateBets(faker.random.number({ min: 0, max: 4 }), id)]
     }
 
+    if (status == 'new') {
+        assignment.placedBets.length = 0;
+    };
+    
     assignment.amount = assignment.placedBets.reduce((agg, next) => agg += next.volume, 0) + faker.random.number({ min: 1, max: 10 }) * 1000;
 
     return assignment;

@@ -1,4 +1,4 @@
-import { resolveAction } from './helpers';
+import { resolveAction, dateReceivedPipe } from './helpers';
 import { API_ACTION_TYPES as ApiTypes } from './constants';
 import api from './index';
 
@@ -19,6 +19,7 @@ export function placeBetThunk(assignmentId, volume, odds) {
                 if (res.error) {
                     throw (res.error);
                 }
+                res = dateReceivedPipe(res);
                 dispatch(resolveAction(ApiTypes.SPLIT_BID_SUCCESS, res));
                 return res;
             })
@@ -42,6 +43,7 @@ export function loadAssignmentsThunk() {
                 if (res.error) {
                     throw (res.error);
                 }
+                res = dateReceivedPipe(res);
                 dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_SUCCESS, res));
                 return res;
             })
@@ -65,6 +67,7 @@ export function loadOrReloadAssignmentThunk(assignmentId) {
                 if (res.error) {
                     throw (res.error);
                 }
+                res = dateReceivedPipe(res);
                 dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_SUCCESS, res));
                 return res;
             })
@@ -76,4 +79,26 @@ export function loadOrReloadAssignmentThunk(assignmentId) {
 
 
 
+/**
+ * Makes asynchronous request to load or reload single assignment
+ * 
+ * @return {function}  - that accepts  dispatch as parameter and makes asynchronous call to api
+ */
+export function setAssignmentStatusThunk(assignmentId, status) {
+    return (dispatch) => {
+        dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_PENDING));
+        api.setStatus(assignmentId, status)
+            .then(res => {
+                if (res.error) {
+                    throw (res.error);
+                }
+                res = dateReceivedPipe(res);
+                dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_SUCCESS, res));
+                return res;
+            })
+            .catch(error => {
+                dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_ERROR, error));
+            })
+    };
+}
 

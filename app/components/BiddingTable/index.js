@@ -5,13 +5,14 @@ import {
     makeSelectLoading,
     makeSelectError
 } from 'containers/App/selectors';
-import { loadOrReloadAssignmentThunk } from './../../api/thunks';
+import { loadOrReloadAssignmentThunk, setAssignmentStatusThunk } from 'api/thunks';
 import BiddingTable from './BiddingTable';
 import { makeSelectSelectedAssignment } from 'selectors/bidding';
 
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    reloadAssignment: loadOrReloadAssignmentThunk
+    reloadAssignment: loadOrReloadAssignmentThunk,
+    setStatus: setAssignmentStatusThunk
 }, dispatch)
 
 

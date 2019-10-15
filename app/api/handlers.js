@@ -39,15 +39,29 @@ const apiHandlers =
         }
         return state;
     },
+    [Types.SET_ASSIGNMENT_STATUS_SUCCESS]: (state, action) => {
+        const { assignments } = state;
+        let targetAssignment = assignments.find(x => x.id == action.payload.assignmentId);
+        if (_.isNil(targetAssignment)) {
+            return state;
+        }
+
+        return { ...state, assignments: replaceOrInsert(assignments, { ...targetAssignment, status: action.payload.status }) }
+    },
     [Types.ADD_COMMENT_SUCCESS]: (state, action) => {
         return state;
     },
     [Types.LOAD_ASSIGNMENTS_SUCCESS]: (state, action) => {
 
-        return { ...state, assignments: [...action.payload], [Types.LOAD_ASSIGNMENTS_PENDING]: false, pending: false }
+        return {
+            ...state,
+            assignments: [...action.payload],
+            [Types.LOAD_ASSIGNMENTS_PENDING]: false, pending: false
+        }
     },
     [Types.LOAD_ASSIGNMENT_SUCCESS]: (state, action) => {
-        return { ...state, assignments: replaceOrInsert(state.assignments, action.payload) };
+        let receivedAssignment = action.payload;
+        return { ...state, assignments: replaceOrInsert(state.assignments, receivedAssignment) };
     }
 }
 

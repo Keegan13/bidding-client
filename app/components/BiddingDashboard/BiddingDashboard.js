@@ -16,9 +16,7 @@ const groupByCutter = (assignments) => {
     grouping.push({
       key: prop,
       items: _.orderBy(groupObject[prop], (item) => {
-        let left = moment(item.startDateTime).valueOf() - Date.now() + item.timeSpan;
-        //ToDo: fix this
-        return left > 0 ? left : 100000;
+        return moment(item.receivedDate).valueOf();
       })
     })
   });
@@ -74,7 +72,7 @@ export default function BiddingDashboard(props) {
         groupByCutter(assignments).map(x =>
           <div className="dashboard-column" id={`cutter-${x.key}`} key={x.key}>
             <h2 className="cutter-name">Cutter {x.key}</h2>
-            {x.items.map((item) => <BiddingCard item={item} key={item.id} onClick={() => handleOpen(item.id)} />)}
+            {x.items.map((item) => <BiddingCard assignment={item} key={item.id} onClick={() => handleOpen(item.id)} />)}
           </div>
         )
       }

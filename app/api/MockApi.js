@@ -1,6 +1,6 @@
 import * as faker from 'faker';
 import * as _ from 'lodash';
-import { generateAssignments,generateAssignment } from './../utils/mocks';
+import { generateAssignments, generateAssignment } from './../utils/mocks';
 
 function createPromise(data) {
 
@@ -53,6 +53,10 @@ export const BiddingApi = {
         };
 
         return createPromise(data);
+    },
+    
+    setStatus(assignmentId, status) {
+        return createPromise({ assignmentId, status })
     },
 
     loadAssignments() {

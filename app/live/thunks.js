@@ -2,6 +2,7 @@ import connection from '.';
 import faker from 'faker';
 import { hubConnectionPending, hubConnectionDisconnected, hubConnectionConnected, hubConnectionError } from './actions';
 import bindHubToDispatch from './bindActionsToConnection';
+import { dateReceivedPipe } from 'api/helpers';
 
 /**
  * Makes asynchronous request to place bet endpoint

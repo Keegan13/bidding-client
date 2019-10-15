@@ -8,6 +8,9 @@ const makeSelectAssignments = () => createSelector(
     (biddingSection) => biddingSection.assignments
 );
 
+const makeSelectBet = () => createSelector(selectBidding, (biddingSection) => biddingSection.bet);
+
+
 const makeSelectSelectedAssignment = () => createSelector(
     selectBidding,
     (biddingSection) => {
@@ -36,5 +39,6 @@ export {
     selectBidding,
     makeSelectError,
     makeSelectAssignments,
+    makeSelectBet,
     makeSelectSelectedAssignment
 };

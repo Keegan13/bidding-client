@@ -5,9 +5,8 @@ import { createStructuredSelector } from 'reselect';
 import { placeBetThunk } from 'api/thunks';
 import { makeSelectError as makeSelectForApiError } from 'selectors/bidding';
 import { makeSelectLoading } from 'containers/App/selectors';
-import { makeSelectSelectedAssignment } from 'selectors/bidding';
+import { makeSelectSelectedAssignment, makeSelectBet } from 'selectors/bidding';
 import { API_ACTION_TYPES } from 'api/constants';
-
 
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
@@ -18,7 +17,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 const mapStateToProps = createStructuredSelector({
     loading: makeSelectLoading(),
     error: makeSelectForApiError(API_ACTION_TYPES.SPLIT_BID_ERROR),
-    assignment: makeSelectSelectedAssignment()
+    assignment: makeSelectSelectedAssignment(),
+    bet: makeSelectBet()
 });
 
 export default compose(connect((mapStateToProps), mapDispatchToProps))(BetForm);
