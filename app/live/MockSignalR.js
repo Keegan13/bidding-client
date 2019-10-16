@@ -5,10 +5,11 @@ import { generateAssignment } from 'utils/mocks';
 const mockConnection = {
     callBacks: [],
     start: function () {
+
         const loop = (() => {
             let rand = faker.random.number({ min: 20, max: 60 }) * 1000;
             setTimeout(() => {
-                const newAssignment = generateAssignment(null,'new');
+                const newAssignment = generateAssignment(null, 'new');
                 console.log('generated new assignment with id ' + newAssignment.id);
                 this.callBacks.forEach((cb) => {
                     cb.call(null, newAssignment);
@@ -23,7 +24,7 @@ const mockConnection = {
             if (faker.random.number(50) % 27 == 0) {
                 throw new Error("Random error occurred");
             }
-  
+
             resolve(this);
         });
 

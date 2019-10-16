@@ -12,7 +12,6 @@ import { ASSIGNMENT_STATUSES } from 'models';
 const STATUSES = {
   pending: "pending",
   placed: "placed",
-  timeout: "timeout",
   toBePlaced: "to-be-placed",
   error: "error"
 };
@@ -79,6 +78,7 @@ const BiddingCard = (props) => {
 
   const [status, setStatus] = useState(getStatusClass(assignment));
   const [progress, setProgress] = useState(getAssignmentProgress(assignment));
+  const [timeout, setTimeout] = useState(isTimeOut(assignment));
 
   useEffect(() => {
     setStatus(getStatusClass(assignment));
@@ -87,7 +87,7 @@ const BiddingCard = (props) => {
 
   const onCountdownCompleteHandler = (value) => {
     if (value.completed) {
-      setStatus(STATUSES.timeout);
+      setTimeout(true);
     }
   };
 
@@ -108,7 +108,7 @@ const BiddingCard = (props) => {
     }
   };
 
-  return (<Card className={`bidding-card ${status} ${isTimeOut(assignment)}`} {...props}>
+  return (<Card className={`bidding-card ${status} ${timeout ? 'timeout' : null}`} {...props}>
     <h4>{assignment.location}</h4>
     <Countdown
       date={moment(assignment.startDateTime).valueOf() + assignment.timeSpan}

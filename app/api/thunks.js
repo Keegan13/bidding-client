@@ -13,7 +13,6 @@ import api from './index';
  */
 export function placeBetThunk(assignmentId, volume, odds) {
     return (dispatch) => {
-
         dispatch(resolveAction(ApiTypes.SPLIT_BID_PENDING));
         api.placeBet(assignmentId, volume, odds)
             .then(res => {
@@ -102,9 +101,6 @@ export function addCommentThunk(assignmentId, text) {
     };
 }
 
-
-
-
 /**
  * Makes asynchronous request to load or reload single assignment
  * 
@@ -127,4 +123,3 @@ export function setAssignmentStatusThunk(assignmentId, status) {
             })
     };
 }
-

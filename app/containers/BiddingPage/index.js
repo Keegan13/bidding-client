@@ -2,26 +2,23 @@ import { connect } from 'react-redux';
 import { compose, bindActionCreators } from 'redux';
 import BiddingPage from './BiddingPage';
 import { createStructuredSelector } from 'reselect';
-import {
-    makeSelectLoading,
-    makeSelectError
-} from 'containers/App/selectors';
-import { splitBidThunk } from 'api/thunks';
-import { makeSelectAssignments, makeSelectSelectedAssignment } from 'selectors/bidding';
+import { removeNotification } from './../../actions/bidding';
+import { makeSelectAssignments, makeSelectSelectedAssignment, makeSelectNotifications } from 'selectors/bidding';
 import { loadAssignmentsThunk } from 'api/thunks';
 import { connectToHubThunk } from 'live/thunks';
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    splitBidAction: splitBidThunk,
     loadAssignments: loadAssignmentsThunk,
-    connectToHub: connectToHubThunk
+    connectToHub: connectToHubThunk,
+    removeNotification: removeNotification
 }, dispatch)
 
 const mapStateToProps = createStructuredSelector({
-    loading: makeSelectLoading(),
-    error: makeSelectError(),
+    // loading: makeSelectLoading(),
+    // error: makeSelectError(),
     assignments: makeSelectAssignments(),
-    assignment: makeSelectSelectedAssignment()
+    assignment: makeSelectSelectedAssignment(),
+    notifications: makeSelectNotifications()
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

@@ -2,11 +2,17 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import BiddingDashboard from '../../components/BiddingDashboard';
 import BiddingSummary from 'components/BiddingSummary';
+import CustomizedSnackbars from './../../components/Notification/Notification';
 import './style.scss';
 
 export default class BiddingPage extends React.Component {
   constructor(props) {
     super(props);
+
+    this.onClose = (id) => {
+      const { removeNotification } = this.props;
+      removeNotification(id);
+    };
   }
 
   componentDidMount() {
@@ -20,12 +26,12 @@ export default class BiddingPage extends React.Component {
   }
 
   render() {
-    const { assignment, assignments } = this.props;
+    const { assignments, notifications } = this.props;
     return (
       <div className="bidding-page">
+        <CustomizedSnackbars notifications={notifications} onClose={this.onClose} />
         <BiddingSummary assignments={assignments} />
         <BiddingDashboard />
-        {/* <Notification /> */}
       </div>
     );
   }

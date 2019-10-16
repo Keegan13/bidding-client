@@ -11,6 +11,7 @@ import NumberFormat from 'react-number-format';
 import MaskedInput from 'react-text-mask';
 import { Form, Control } from 'react-redux-form';
 import { useForm, useField, splitFormProps } from "react-form";
+import moment from 'moment';
 import './styles.scss';
 
 function parseOdds(p, q) {
@@ -100,48 +101,21 @@ const BetForm = (props) => {
 
     const handleChange = name => event => {
         const { value } = event.target;
-        setState((state) => ({ ...state, [name]: value }));
 
-
-
-        // const validationResult = _.values({ ...validators[''], ...validators[name] }).reduce((agg, val) => {
-        //     if (val.isValid(getState)) {
-        //         agg.isValid = true;
-        //     }
-        //     else {
-        //         agg.isValid = false;
-        //         agg.errors[name].push(val.errorMessage);
-        //     }
-        //     return agg;
-        // }, {
-        //     isValid: true,
-        //     errors: {
-        //         [name]: []
-        //     }
-        // });
-
-        // if (!validationResult.isValid) {
-        //     setState({
-        //         errors: {
-        //             [name]: validationResult.errors[name],
-        //             ['']: validationResult.errors['']
-        //         }
-        //     });
-
-        // }
+        if (value === '' || value > 0) {
+            setState((state) => ({ ...state, [name]: value }));
+        }
 
     };
 
     const onPlaceBetSubmit = () => {
-        if (getState.volume && getState.volume > 0 && getAmountLeft(assignment) >= getState.volume) {
-            let odds = parseOdds(getState.placed, getState.win);
-
-            placeBet(assignment.id, getState.volume, `${odds.p} : ${odds.q}`);
-        }
-        else {
+        if (_.isNil(getState.volume) || getState.placed <= 0 || getState.win <= 0 || getAmountLeft(assignment) < getState.volume) {
             setState({ volume: '', placed: 1, win: 1 });
+            return;
         }
 
+        let odds = parseOdds(getState.placed, getState.win);
+        placeBet(assignment.id, getState.volume, `${odds.p} : ${odds.q}`);
     };
 
     const handleSubmitFailed = (form) => {
@@ -150,26 +124,34 @@ const BetForm = (props) => {
     };
 
 
+    const isTimeOut = (assignment) => {
+        let endTicks = moment(assignment.startDateTime).valueOf() + assignment.timeSpan;
+        let nowTicks = Date.now();
+        return nowTicks >= endTicks ? true : false;
+    };
+
     const onPlaceAllClick = () => {
         setState({ volume: getAmountLeft(assignment) });
     };
 
     //const required = str => !_.isNil(str);
 
+    const disabled = getAmountLeft(assignment) <= 0 || isTimeOut(assignment) ? true : false;
+
     return (
         <div className="place-bet-form">
             <div className='form-control'>
                 <label >Volume</label>
-                <input name="volume" value={getState.volume} onChange={handleChange('volume')} />
+                <input name="volume" value={getState.volume} onChange={handleChange('volume')} disabled={disabled} />
             </div>
             <div>
                 <label >Odds</label>
-                <input className="odds-input" name="placed" value={getState.placed} onChange={handleChange('placed')} />
+                <input className="odds-input" name="placed" value={getState.placed} onChange={handleChange('placed')} disabled={disabled} />
 
                 <span>-</span>
-                <input className="odds-input" name="win" value={getState.win} onChange={handleChange('win')} />
+                <input className="odds-input" name="win" value={getState.win} onChange={handleChange('win')} disabled={disabled} />
             </div>
-            <button type="button" onClick={onPlaceBetSubmit}>Add</button>
+            <button type="button" onClick={onPlaceBetSubmit} disabled={disabled}>Add</button>
         </div>
     )
 };

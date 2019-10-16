@@ -12,13 +12,10 @@ import '@babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
-//import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
-
 // Import root app
 import App from 'containers/App';
-
+import { Notifs } from 'redux-notifications';
 // Load the favicon
 /* eslint-disable import/no-webpack-loader-syntax */
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
@@ -26,6 +23,7 @@ import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 
 // Import CSS reset and Global Styles
 import 'styles/theme.scss';
+import 'redux-notifications/lib/styles.css';
 
 import configureStore from './configureStore';
 
@@ -43,8 +41,9 @@ const render = () => {
   ReactDOM.render(
     <Provider store={store}>
       {/* <ConnectedRouter history={history}> */}
-        <App />
+      <App />
       {/* </ConnectedRouter> */}
+      <Notifs store={store} />
     </Provider>,
     rootElement
   );

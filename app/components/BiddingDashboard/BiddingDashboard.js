@@ -3,11 +3,12 @@ import BiddingTable from 'components/BiddingTable';
 import BiddingCard from 'components/BiddingCard';
 import * as _ from 'lodash';
 import './styles.scss';
-import { selectAssignment } from 'actions/bidding';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import BiddingSummary from '../BiddingSummary/BiddingSummary';
 import moment from 'moment';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const groupByCutter = (assignments) => {
   var grouping = [];
@@ -42,12 +43,18 @@ const useStyles = makeStyles(theme => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  removeButton: {
+    position: 'absolute',
+    top: '142px',
+    right: '17px',
+    zIndex: '2'
+  }
 }));
 
 
 export default function BiddingDashboard(props) {
   const classes = useStyles();
-  const { assignments, assignment, selectAssignment, deselectAssignment } = props;
+  const { assignments, selectAssignment, deselectAssignment, removeAssignment, cutters } = props;
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
@@ -57,8 +64,8 @@ export default function BiddingDashboard(props) {
   };
 
   const handleClose = () => {
-    deselectAssignment();
     setOpen(false);
+    deselectAssignment();
   };
 
 
@@ -69,12 +76,19 @@ export default function BiddingDashboard(props) {
   return (
     <div className="bidding-dashboard">
       {
-        groupByCutter(assignments).map(x =>
-          <div className="dashboard-column" id={`cutter-${x.key}`} key={x.key}>
-            <h2 className="cutter-name">Cutter {x.key}</h2>
-            {x.items.map((item) => <BiddingCard assignment={item} key={item.id} onClick={() => handleOpen(item.id)} />)}
+        cutters.map(cutter =>
+          (<div className="dashboard-column" id={`cutter-${cutter.id}`} key={cutter.id}>
+            <h2 className="cutter-name">Cutter {cutter.id}</h2>
+            {
+              assignments.filter(x => x.cutterId == cutter.id).map(item => (<div style={{ position: 'relative' }} key={item.id}>
+                <IconButton aria-label="delete" onClick={() => removeAssignment(item.id)} className={classes.removeButton}>
+                  <DeleteIcon fontSize="large" />
+                </IconButton>
+                <BiddingCard assignment={item} key={item.id} onClick={() => handleOpen(item.id)} />
+              </div>))
+            }
           </div>
-        )
+          ))
       }
       <Modal
         open={open}
@@ -83,5 +97,5 @@ export default function BiddingDashboard(props) {
           <BiddingTable />
         </div>
       </Modal>
-    </div>)
+    </div >)
 }

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { ASSIGNMENT_STATUSES } from 'models';
-
+import * as _ from 'lodash';
 const canToPlaced = (assignment) => {
     if (assignment.status === ASSIGNMENT_STATUSES.PLACED) {
         return false;
@@ -34,7 +34,7 @@ const canToBePlaced = (assignment) => {
     if (assignment.placedBets.some(x => x.volume > 0))
         return false;
 
-        return true;
+    return true;
 }
 
 const StatusSwitch = (props) => {

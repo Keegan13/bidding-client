@@ -1,16 +1,46 @@
 /**
  * Create the store with dynamic reducers
  */
-
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import createReducer from './reducers';
 import logger from 'redux-logger'
 import thunk from 'redux-thunk';
-import connection from 'live';
-import { hubNewAssignment } from 'live/actions';
+import { createNotificationMiddleware } from 'api/apiMiddleware';
+import { NOTIFICATION_TYPES } from './constants';
+import { API_ACTION_TYPES } from './api/constants';
+import { SELECT_ASSIGNMENT } from './actions';
 
 export default function configureStore(initialState = {}) {
-  const middleware = [logger, thunk];
+
+  const notificationConfig = {
+    [API_ACTION_TYPES.ADD_COMMENT_ERROR]: {
+      message: 'Cannot add comment',
+      type: NOTIFICATION_TYPES.ERROR,
+      timeout: 20000,
+      level: 50
+    },
+    [API_ACTION_TYPES.SPLIT_BID_ERROR]: {
+      message: 'Cannot place bet',
+      type: NOTIFICATION_TYPES.ERROR,
+      timeout: 20000,
+      level: 50
+    },
+    [API_ACTION_TYPES.SET_ASSIGNMENT_STATUS_ERROR]: {
+      message: "Can't change status",
+      type: NOTIFICATION_TYPES.ERROR,
+      timeout: 20000,
+      level: 50
+    },
+    [SELECT_ASSIGNMENT]: {
+      message: 'Item selected [Test]',
+      type: NOTIFICATION_TYPES.SUCCESS,
+      timeout: 20000,
+      level: 1000
+    }
+  };
+
+
+  const middleware = [logger, thunk, createNotificationMiddleware(notificationConfig)];
   const enhancers = [applyMiddleware(...middleware)];
 
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose

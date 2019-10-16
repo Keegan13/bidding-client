@@ -47,6 +47,16 @@ const makeSelectError = (actionType) => createSelector(
 );
 
 
+const makeSelectCutters = () => createSelector(
+    selectBidding,
+    (biddingSection) => {
+        return biddingSection.cutters;
+    }
+);
+
+
+const makeSelectNotifications = () => createSelector(selectBidding,
+    (biddingSection) => biddingSection.notifications);
 
 export {
     selectBidding,
@@ -54,5 +64,7 @@ export {
     makeSelectAssignments,
     makeSelectBet,
     makeSelectSelectedAssignment,
-    makeSelectAssignment
+    makeSelectAssignment,
+    makeSelectCutters,
+    makeSelectNotifications
 }

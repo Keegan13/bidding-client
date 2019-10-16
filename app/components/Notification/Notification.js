@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
@@ -12,6 +12,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
+import { removeNotification } from '../../actions';
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -48,6 +49,7 @@ const useStyles1 = makeStyles(theme => ({
 
 function Notification(props) {
   const classes = useStyles1();
+  const { id } = props;
   const { className, message, onClose, variant, ...other } = props;
   const Icon = variantIcon[variant];
 
@@ -57,12 +59,14 @@ function Notification(props) {
       aria-describedby="client-snackbar"
       message={
         <span id="client-snackbar" className={classes.message}>
-          <Icon className={clsx(classes.icon, classes.iconVariant)} />
+          <Icon
+            className={clsx(classes.icon, classes.iconVariant)}
+          />
           {message}
         </span>
       }
       action={[
-        <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
+        <IconButton key="close" aria-label="close" color="inherit" onClick={() => onClose(id)}>
           <CloseIcon className={classes.icon} />
         </IconButton>,
       ]}
@@ -84,62 +88,31 @@ const useStyles2 = makeStyles(theme => ({
   },
 }));
 
-export default function CustomizedSnackbars() {
+export default function CustomizedSnackbars(props) {
+  const { notifications, onClose } = props;
   const classes = useStyles2();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClick = () => {
     setOpen(true);
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
+  const handleClose = (id) => {
+    onClose(id);
     setOpen(false);
   };
 
   return (
-    <div>
-      <Button variant="outlined" className={classes.margin} onClick={handleClick}>
-        Open success snackbar
-      </Button>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-      >
-        <Notification
+    <div style={{ position: 'fixed', zIndex: 30000 }}>
+      {
+        notifications.map(item => (<Notification key={item.id}
+          id={item.id}
+          variant={item.type}
+          className={classes.margin}
+          message={item.message}
           onClose={handleClose}
-          variant="success"
-          message="This is a success message!"
-        />
-      </Snackbar>
-      <Notification
-        variant="error"
-        className={classes.margin}
-        message="This is an error message!"
-      />
-      <Notification
-        variant="warning"
-        className={classes.margin}
-        message="This is a warning message!"
-      />
-      <Notification
-        variant="info"
-        className={classes.margin}
-        message="This is an information message!"
-      />
-      <Notification
-        variant="success"
-        className={classes.margin}
-        message="This is a success message!"
-      />
+        />))
+      }
     </div>
   );
 }

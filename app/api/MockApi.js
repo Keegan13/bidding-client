@@ -5,17 +5,16 @@ import { generateAssignments, generateAssignment } from './../utils/mocks';
 function createPromise(data) {
 
     let promise = new Promise(function (resolve, reject) {
-        resolve(data);
-        // setTimeout(function () {
-        //     if (faker.random.number(10) % 9 == 0) {
-        //         reject("error")
-        //     } else {
-        //         resolve(data);
-        //     }
-        // },
-        //     //faker.random.number(1)
-        //     1
-        // );
+        
+        setTimeout(function () {
+            if (faker.random.number(10) % 3 == 0) {
+                reject("error")
+            } else {
+                resolve(data);
+            }
+        },
+            faker.random.number(100)
+        );
     });
     return promise;
 };
