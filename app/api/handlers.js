@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import { createDefaultApiHandlers } from './helpers';
 import { API_ACTION_TYPES as Types } from './constants';
 import { replace } from 'connected-react-router';
+import { taggedTemplateExpression } from '@babel/types';
 
 //Types
 export const apiTypes = [..._.values(Types)];
@@ -62,6 +63,22 @@ const apiHandlers =
     [Types.LOAD_ASSIGNMENT_SUCCESS]: (state, action) => {
         let receivedAssignment = action.payload;
         return { ...state, assignments: replaceOrInsert(state.assignments, receivedAssignment) };
+    },
+    [Types.ADD_COMMENT_SUCCESS]: (state, action) => {
+        let comment = action.payload;
+
+        if (_.isNil(comment) || _.isNil(comment.id)) {
+            return state;
+        }
+
+        const { assignments } = state;
+        let targetAssignment = assignments.find(x => x.id == action.payload.assignmentId);
+
+        if (_.isNil(targetAssignment)) {
+            return state;
+        }
+
+        return { ...state, assignments: replaceOrInsert(state.assignments, { ...targetAssignment, comments: [...(targetAssignment.comments || []), comment] }) }
     }
 }
 

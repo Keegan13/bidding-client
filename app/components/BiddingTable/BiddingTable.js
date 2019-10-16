@@ -18,6 +18,20 @@ class BiddingTable extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            text: ''
+        };
+
+        this.addComment = (assignmentId) => {
+            const { text } = this.state;
+            const { addComment } = this.props;
+            addComment(assignmentId, text);
+        };
+
+        this.onCommentChange = (event) => {
+            const { value } = event.target;
+            this.setState({ text: value });
+        }
     }
 
     render() {
@@ -31,9 +45,13 @@ class BiddingTable extends React.Component {
                 <StatusSwitch assignment={assignment} onStatusChange={({ assignmentId, status }) => setStatus(assignmentId, status)} />
                 <div>
                     <p>Comments</p>
-                    <textarea className="feedback-area"></textarea>
+                    {assignment.comments ? assignment.comments.map(item =>
+                        <p key={item.id}>{item.text}</p>
+                    ) : null}
+                    <textarea className="feedback-area" value={this.state.text} onChange={this.onCommentChange}></textarea>
                 </div>
-                <button className="btn btn-primary" onClick={() => reloadAssignment(assignment.id)}>Reload</button>
+                <button onClick={() => this.addComment(assignment.id)}>Add</button>
+                {/* <button className="btn btn-primary" onClick={() => reloadAssignment(assignment.id)}>Reload</button> */}
             </div>
             <div>
                 <div>

@@ -30,7 +30,11 @@ const canToError = (assignment) => {
 const canToBePlaced = (assignment) => {
     if (assignment.status === ASSIGNMENT_STATUSES.TO_BE_PLACED)
         return false;
-    return true;
+
+    if (assignment.placedBets.some(x => x.volume > 0))
+        return false;
+
+        return true;
 }
 
 const StatusSwitch = (props) => {

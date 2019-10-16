@@ -11,6 +11,19 @@ const makeSelectAssignments = () => createSelector(
 const makeSelectBet = () => createSelector(selectBidding, (biddingSection) => biddingSection.bet);
 
 
+const makeSelectAssignment = (id) => createSelector(
+    selectBidding,
+    (biddingSection) => {
+        let assignments = biddingSection.assignments;
+        if (!assignments || !assignments.length > 0 || !id) {
+            return null;
+        }
+
+        let item = assignments.find(x => x.id == id);
+        return item;
+    }
+);
+
 const makeSelectSelectedAssignment = () => createSelector(
     selectBidding,
     (biddingSection) => {
@@ -40,5 +53,6 @@ export {
     makeSelectError,
     makeSelectAssignments,
     makeSelectBet,
-    makeSelectSelectedAssignment
-};
+    makeSelectSelectedAssignment,
+    makeSelectAssignment
+}

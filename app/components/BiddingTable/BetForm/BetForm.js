@@ -25,7 +25,6 @@ function parseOdds(p, q) {
         _q /= _p;
         _p = 1;
     }
-
     return {
         p: Math.round(_p * 10) / 10,
         q: Math.round(_q * 10) / 10
@@ -50,10 +49,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const validateOdds = ({ placed, win }) => {
 
-    return true;
-};
 
 const getAmountLeft = (assignment) => {
     let placed = assignment.placedBets.reduce((agg, next) => agg += next.volume, 0);
@@ -66,50 +62,80 @@ const BetForm = (props) => {
     const classes = useStyles();
     const { placeBet, assignment } = props;
     const [getState, setState] = useState({
-        volume: '', placed: '', win: ''
+        volume: '',
+        placed: 1,
+        win: 1
     });
 
-    const required = {
-        isValid: (value) => !_.isNil(value),
-        errorMessage: "Field is required"
-    };
-    const volumeValidator = {
-        isValid: ({ volume }) => {
-            let left = assignment.amount - assignment.placedBets.reduce((agg, next) => agg += next.volume, 0);
-            return left >= volume;
-        },
-        errorMessage: "Volume is not valid!!"
-    };
+    // const required = {
+    //     isValid: (value) => !_.isNil(value),
+    //     errorMessage: "Field is required"
+    // };
 
-    const validators = {
-        '': { validateOdds },
-        volume: { required, isVolumeValid: volumeValidator },
-        placed: { required },
-        win: { required }
-    };
+    // const volumeValidator = {
+    //     isValid: ({ volume }) => {
+    //         if (volume < 0) {
+    //             return false;
+    //         }
+    //         let left = assignment.amount - assignment.placedBets.reduce((agg, next) => agg += next.volume, 0);
+    //         return left >= volume;
+    //     },
+    //     errorMessage: "Volume is not valid!!"
+    // };
 
+
+    // const validateOdds = {
+    //     isValid: ({ placed, win }) => {
+    //         return true;
+    //     },
+    //     errorMessage: "Volume is not valid!!"
+    // }
+
+    // const validators = {
+    //     '': { validateOdds },
+    //     volume: { volumeValidator },
+    //     placed: {},
+    //     win: {}
+    // };
 
     const handleChange = name => event => {
+        const { value } = event.target;
+        setState((state) => ({ ...state, [name]: value }));
 
-        _.values(validators[name]).forEach(val=>)
-        if (.reduce((agg, val) => {
-            if (val.call(null, getState)) {
-                agg.isValid = true;
-            }
-            else {
-                agg.errors.push();
-            }
-        }),
-            {
-                isValid: true,
-                errors: []
-            })
-            setState({ ...getState, [name]: event.target.value });
+
+
+        // const validationResult = _.values({ ...validators[''], ...validators[name] }).reduce((agg, val) => {
+        //     if (val.isValid(getState)) {
+        //         agg.isValid = true;
+        //     }
+        //     else {
+        //         agg.isValid = false;
+        //         agg.errors[name].push(val.errorMessage);
+        //     }
+        //     return agg;
+        // }, {
+        //     isValid: true,
+        //     errors: {
+        //         [name]: []
+        //     }
+        // });
+
+        // if (!validationResult.isValid) {
+        //     setState({
+        //         errors: {
+        //             [name]: validationResult.errors[name],
+        //             ['']: validationResult.errors['']
+        //         }
+        //     });
+
+        // }
+
     };
 
     const onPlaceBetSubmit = () => {
-        if (getAmountLeft(assignment) >= getState.volume) {
-            let odds = parseOdds(getState.odds1, getState.odds2);
+        if (getState.volume && getState.volume > 0 && getAmountLeft(assignment) >= getState.volume) {
+            let odds = parseOdds(getState.placed, getState.win);
+
             placeBet(assignment.id, getState.volume, `${odds.p} : ${odds.q}`);
         }
         else {
@@ -128,18 +154,21 @@ const BetForm = (props) => {
         setState({ volume: getAmountLeft(assignment) });
     };
 
-    const required = str => !_.isNil(str);
-
-
+    //const required = str => !_.isNil(str);
 
     return (
         <div className="place-bet-form">
-            <label >Volume</label>
-            <input name="volume" value={getState.volume} onChange={handleChange('volume')} />
-            <label >Odds</label>
-            <input name="placed" value={getState.placed} onChange={handleChange('placed')} />
-            <span>-</span>
-            <input name="win" value={getState.win} onChange={handleChange('win')} />
+            <div className='form-control'>
+                <label >Volume</label>
+                <input name="volume" value={getState.volume} onChange={handleChange('volume')} />
+            </div>
+            <div>
+                <label >Odds</label>
+                <input className="odds-input" name="placed" value={getState.placed} onChange={handleChange('placed')} />
+
+                <span>-</span>
+                <input className="odds-input" name="win" value={getState.win} onChange={handleChange('win')} />
+            </div>
             <button type="button" onClick={onPlaceBetSubmit}>Add</button>
         </div>
     )

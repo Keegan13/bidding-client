@@ -4,10 +4,6 @@
   .dashboard-column {
     &:hover {
       background-color: lightsalmon;
-
-      .cutter-name {
-          font-size: xx-large;
-      }
     }
     display: flex;
     flex-direction: column;

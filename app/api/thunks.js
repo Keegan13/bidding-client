@@ -13,6 +13,7 @@ import api from './index';
  */
 export function placeBetThunk(assignmentId, volume, odds) {
     return (dispatch) => {
+
         dispatch(resolveAction(ApiTypes.SPLIT_BID_PENDING));
         api.placeBet(assignmentId, volume, odds)
             .then(res => {
@@ -76,6 +77,31 @@ export function loadOrReloadAssignmentThunk(assignmentId) {
             })
     };
 }
+
+
+/**
+ * Makes asynchronous request to load or reload single assignment
+ * 
+ * @return {function}  - that accepts  dispatch as parameter and makes asynchronous call to api
+ */
+export function addCommentThunk(assignmentId, text) {
+    return (dispatch) => {
+        dispatch(resolveAction(ApiTypes.ADD_COMMENT_PENDING));
+        api.addComment(assignmentId, text)
+            .then(res => {
+                if (res.error) {
+                    throw (res.error);
+                }
+                res = dateReceivedPipe(res);
+                dispatch(resolveAction(ApiTypes.ADD_COMMENT_SUCCESS, res));
+                return res;
+            })
+            .catch(error => {
+                dispatch(resolveAction(ApiTypes.ADD_COMMENT_ERROR, error));
+            })
+    };
+}
+
 
 
 

@@ -5,13 +5,17 @@ import { generateAssignments, generateAssignment } from './../utils/mocks';
 function createPromise(data) {
 
     let promise = new Promise(function (resolve, reject) {
-        setTimeout(function () {
-            if (faker.random.number(10) % 9 == 0) {
-                reject("error")
-            } else {
-                resolve(data);
-            }
-        }, faker.random.number(500));
+        resolve(data);
+        // setTimeout(function () {
+        //     if (faker.random.number(10) % 9 == 0) {
+        //         reject("error")
+        //     } else {
+        //         resolve(data);
+        //     }
+        // },
+        //     //faker.random.number(1)
+        //     1
+        // );
     });
     return promise;
 };
@@ -44,17 +48,17 @@ export const BiddingApi = {
         return createPromise(response);
     },
 
-    addComment(bidId, text) {
+    addComment(assignmentId, text) {
         var data = {
             id: faker.random.number(10000),
-            text: text,
-            bidId: bidId,
+            assignmentId,
+            text,
             authorName: `${faker.name.firstName()} ${faker.name.lastName()}`
-        };
 
+        }
         return createPromise(data);
     },
-    
+
     setStatus(assignmentId, status) {
         return createPromise({ assignmentId, status })
     },

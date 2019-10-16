@@ -16,10 +16,8 @@
   height: 210px;
   border: 2px solid #321321;
 
-  &.timeout {
-    &:after {
-      content: "";
-    }
+  &.selected {
+    border-color: red;
   }
 
   &.pending {

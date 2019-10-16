@@ -4,16 +4,18 @@
   .div {
     padding: 20px;
   }
-  input{
-      margin-left:10px;
-      margin-left:10px;
+  input {
+    margin-left: 10px;
+    margin-left: 10px;
   }
 }
 
 .form-group {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
 }
+
 .input-button {
   position: absolute;
   top: 0px;
