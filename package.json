@@ -1,13 +1,13 @@
 {
-  "name": "react-redux-boilerplate",
-  "version": "1.0.0",
-  "description": "A minimal react-redux boilerplate with all the best practices",
+  "name": "bidding-client",
+  "version": "0.2.0",
+  "description": "Hourse riding bidding app",
   "repository": {
     "type": "git",
-    "url": "git://github.com/flexdinesh/react-redux-boilerplate.git"
+    "url": "git://github.com/Keegan13/bidding-client.git"
   },
-  "license": "MIT",
-  "author": "Dinesh Pandiyan",
+  "license": "none",
+  "author": "Andrew Ilyin",
   "scripts": {
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
@@ -62,7 +62,6 @@
     "react-text-mask": "^5.4.3",
     "redux": "4.0.1",
     "redux-logger": "^3.0.6",
-    "redux-notifications": "^4.0.1",
     "redux-saga": "1.0.3",
     "redux-thunk": "^2.3.0",
     "reselect": "4.0.0",

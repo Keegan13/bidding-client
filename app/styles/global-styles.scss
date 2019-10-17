@@ -5,11 +5,19 @@ body {
 }
 
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Frank-New-Medium", Helvetica, Arial, sans-serif;
+  font-weight: 500;
 }
 
-body.fontLoaded {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+
+  font-weight: 700;
 }
 
 #app {
@@ -20,6 +28,14 @@ body.fontLoaded {
 
 p,
 label {
-  font-family: Georgia, Times, 'Times New Roman', serif;
   line-height: 1.5em;
+}
+
+.app-wrapper {
+  // max-width: calc(768px + 16px * 2);
+  margin: 0 auto;
+  display: flex;
+  min-height: 100%;
+  padding: 0 16px;
+  flex-direction: column;
 }

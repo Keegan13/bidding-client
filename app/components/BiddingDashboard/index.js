@@ -1,10 +1,6 @@
 import { connect } from 'react-redux';
 import { compose, bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import {
-    makeSelectLoading,
-    makeSelectError
-} from 'containers/App/selectors';
 import { splitBidThunk, loadAssignmentsThunk } from 'api/thunks';
 import { selectAssignment, deselectAssignment, removeAssignment } from 'actions';
 import BiddingDashboard from './BiddingDashboard';
@@ -22,8 +18,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
 
 const mapStateToProps = createStructuredSelector({
-    loading: makeSelectLoading(),
-    error: makeSelectError(),
     assignments: makeSelectAssignments(),
     cutters: makeSelectCutters(),
     assignment: makeSelectSelectedAssignment()

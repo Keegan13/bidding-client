@@ -43,9 +43,7 @@ const isTimeOut = (ass) => {
 
 
 const getStatusClass = (assignment) => {
-
   const isError = (ass) => ass.status === ASSIGNMENT_STATUSES.ERROR ? true : false;
-
   const isPlaced = (ass) => ass.status === ASSIGNMENT_STATUSES.PLACED || ass.placedBets.reduce((agg, next) => agg += next.volume, 0) >= ass.amount ? true : false;
   const isToBePlaced = (ass) => ass.status === ASSIGNMENT_STATUSES.TO_BE_PLACED || !ass.placedBets || ass.placedBets.length == 0 ? true : false;
   const isPending = (ass) => ass.status === ASSIGNMENT_STATUSES.PENDING ? true : false;
@@ -108,7 +106,9 @@ const BiddingCard = (props) => {
     }
   };
 
-  return (<Card className={`bidding-card ${status} ${timeout ? 'timeout' : null}`} {...props}>
+  return (<Card
+    className={`bidding-card ${status} ${timeout ? 'timeout' : null}`} {...props}>
+
     <h4>{assignment.location}</h4>
     <Countdown
       date={moment(assignment.startDateTime).valueOf() + assignment.timeSpan}

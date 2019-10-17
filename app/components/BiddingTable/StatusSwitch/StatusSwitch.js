@@ -41,7 +41,7 @@ const StatusSwitch = (props) => {
     const { assignment, onStatusChange } = props;
 
     useEffect(() => {
-        console.log('effect switch');
+        
     }, [assignment])
 
 

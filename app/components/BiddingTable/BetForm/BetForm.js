@@ -1,44 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as _ from 'lodash';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
-import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
-import NumberFormat from 'react-number-format';
-import MaskedInput from 'react-text-mask';
-import { Form, Control } from 'react-redux-form';
-import { useForm, useField, splitFormProps } from "react-form";
-import moment from 'moment';
-import './styles.scss';
+import { useForm, useField } from "react-form";
 
 function parseOdds(p, q) {
-    let _p = Number.parseInt(p);
-    let _q = Number.parseInt(q);
-
-    if (_p > _q) {
-        _p /= _q;
-        _q = 1;
-    }
-    else {
-        _q /= _p;
-        _p = 1;
-    }
     return {
-        p: Math.round(_p * 10) / 10,
-        q: Math.round(_q * 10) / 10
-    }
+        p: p > q ? Math.round(p / q * 10) / 10 : 1,
+        q: q > p ? Math.round(q / p * 10) / 10 : 1
+    };
 }
 
 const useStyles = makeStyles(theme => ({
     submitButton: {
         margin: theme.spacing(1),
     },
-    container: {
+    form: {
         display: 'flex',
-        flexWrap: 'wrap',
+        position: 'relative'
+    },
+    formGroup: {
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column'
     },
     formControl: {
         margin: theme.spacing(1),
@@ -46,115 +30,125 @@ const useStyles = makeStyles(theme => ({
     formOdds: {
         width: '80px',
         marginRight: '20px'
+    },
+    messageInvalid: {
+        display: 'block',
+        color: '#ab2424',
+        fontWeight: 500
     }
 }));
-
-
-
 
 const getAmountLeft = (assignment) => {
     let placed = assignment.placedBets.reduce((agg, next) => agg += next.volume, 0);
     let left = assignment.amount - placed;
-
-    return left > 0 ? left : 0;
+    return !_.isNaN(left) && left > 0 ? left : 0;
 };
 
-const BetForm = (props) => {
+
+const BetForm = ({ placeBet, assignment, ...other }) => {
     const classes = useStyles();
-    const { placeBet, assignment } = props;
-    const [getState, setState] = useState({
-        volume: '',
-        placed: 1,
-        win: 1
+    const { Form, formContext, meta: { canSubmit, error } } = useForm({
+        onSubmit: ({ volume, placed, win }, instance) => {
+            let odds = parseOdds(placed, win);
+            placeBet(assignment.id, volume, `${odds.p} : ${odds.q}`);
+            instance.setFieldMeta('volume', (meta) => {
+                meta.isTouched = false;
+                return meta;
+            });
+        }
+    });
+    const { getInputProps: volumeGetInputProps, meta: { error: errorVolume } } = useField('volume', {
+        formContext,
+        validate: (value) => {
+            if (!value) {
+                return 'Volume is required field!';
+            }
+            if (parseInt(value) <= 0) {
+                return 'Volume should be greater than 0';
+            }
+            if (getAmountLeft(assignment) < value) {
+                return "Not enough money left";
+            }
+
+            return false;
+        }
     });
 
-    // const required = {
-    //     isValid: (value) => !_.isNil(value),
-    //     errorMessage: "Field is required"
-    // };
+    const { getInputProps: placedGetInputProps, meta: { error: errorPlaced } } = useField('placed', {
+        formContext,
+        validate: (value) => {
+            if (!value) {
+                return 'Left hand odds is required field!';
+            }
 
-    // const volumeValidator = {
-    //     isValid: ({ volume }) => {
-    //         if (volume < 0) {
-    //             return false;
-    //         }
-    //         let left = assignment.amount - assignment.placedBets.reduce((agg, next) => agg += next.volume, 0);
-    //         return left >= volume;
-    //     },
-    //     errorMessage: "Volume is not valid!!"
-    // };
+            if (parseInt(value) < 1) {
+                return 'Left hand odds should be greater or equal to 1';
+            }
 
-
-    // const validateOdds = {
-    //     isValid: ({ placed, win }) => {
-    //         return true;
-    //     },
-    //     errorMessage: "Volume is not valid!!"
-    // }
-
-    // const validators = {
-    //     '': { validateOdds },
-    //     volume: { volumeValidator },
-    //     placed: {},
-    //     win: {}
-    // };
-
-    const handleChange = name => event => {
-        const { value } = event.target;
-
-        if (value === '' || value > 0) {
-            setState((state) => ({ ...state, [name]: value }));
+            return false;
         }
+    });
 
-    };
+    const { getInputProps: winGetInputProps, meta: { error: errorWin } } = useField('win', {
+        formContext,
+        validate: (value) => {
+            if (!value) {
+                return 'Right hand odds is required field';
+            }
 
-    const onPlaceBetSubmit = () => {
-        if (_.isNil(getState.volume) || getState.placed <= 0 || getState.win <= 0 || getAmountLeft(assignment) < getState.volume) {
-            setState({ volume: '', placed: 1, win: 1 });
-            return;
+            if (parseInt(value) < 1) {
+                return 'Right hand odds should be greater or equal to 1';
+            }
+            return false;
         }
+    });
 
-        let odds = parseOdds(getState.placed, getState.win);
-        placeBet(assignment.id, getState.volume, `${odds.p} : ${odds.q}`);
-    };
-
-    const handleSubmitFailed = (form) => {
-
-        throw new Error("Function not implemented!");
-    };
-
-
-    const isTimeOut = (assignment) => {
-        let endTicks = moment(assignment.startDateTime).valueOf() + assignment.timeSpan;
-        let nowTicks = Date.now();
-        return nowTicks >= endTicks ? true : false;
-    };
-
-    const onPlaceAllClick = () => {
-        setState({ volume: getAmountLeft(assignment) });
-    };
-
-    //const required = str => !_.isNil(str);
-
-    const disabled = getAmountLeft(assignment) <= 0 || isTimeOut(assignment) ? true : false;
-
-    return (
-        <div className="place-bet-form">
-            <div className='form-control'>
-                <label >Volume</label>
-                <input name="volume" value={getState.volume} onChange={handleChange('volume')} disabled={disabled} />
+    return (<Form className={classes.form} {...other}>
+        <div className={classes.formGroup}>
+            <label>
+                Volume:
+            </label>
+            <div className={classes.formControl}>
+                <input {...volumeGetInputProps()} type="number" />
+                <span className={classes.messageInvalid}>{errorVolume}</span>
             </div>
-            <div>
-                <label >Odds</label>
-                <input className="odds-input" name="placed" value={getState.placed} onChange={handleChange('placed')} disabled={disabled} />
-
-                <span>-</span>
-                <input className="odds-input" name="win" value={getState.win} onChange={handleChange('win')} disabled={disabled} />
-            </div>
-            <button type="button" onClick={onPlaceBetSubmit} disabled={disabled}>Add</button>
         </div>
-    )
+        <div className={classes.formGroup}>
+            <label>
+                Odds:
+            </label>
+            <div className={classes.formGroup}>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <input className={classes.formOdds} {...placedGetInputProps()} type="number" />
+                    <span>-</span>
+                    <input className={classes.formOdds} {...winGetInputProps()} type="number" />
+                </div>
+                <span className={classes.messageInvalid}>{errorWin}</span>
+                <span className={classes.messageInvalid}>{errorPlaced}</span>
+            </div>
+        </div>
+        <div className={classes.formGroup}>
+            <button className={classes.submitButton} type="submit" disabled={!canSubmit}>Add</button>
+        </div>
+    </Form>);
 };
 
+BetForm
+
+BetForm.propTypes = {
+    assignment: PropTypes.object.isRequired,
+    placeBet: PropTypes.func.isRequired
+};
 
 export default BetForm;
+
+// export default React.memo(BetForm, (prevProps, nextProps) => {
+//     const { assignment: prev } = prevProps;
+//     const { assignment: next } = nextProps;
+
+//     let shouldUpdate = prev.id != next.id
+//         || prev.placedBets.length != next.placedBets.length
+//         || prev.status != next.status ? true : false;
+
+//     return shouldUpdate;
+// })

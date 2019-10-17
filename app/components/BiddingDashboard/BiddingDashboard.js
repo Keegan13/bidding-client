@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     width: 'auto',
     height: 'auto',
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    borderRadius: '4px',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },

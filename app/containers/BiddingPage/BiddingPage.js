@@ -1,8 +1,8 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import BiddingDashboard from '../../components/BiddingDashboard';
+import BiddingDashboard from 'components/BiddingDashboard';
 import BiddingSummary from 'components/BiddingSummary';
-import CustomizedSnackbars from './../../components/Notification/Notification';
+import NotificationQueue from 'components/NotificationQueue';
 import './style.scss';
 
 export default class BiddingPage extends React.Component {
@@ -20,16 +20,13 @@ export default class BiddingPage extends React.Component {
     //loadAssignments();
     connectToHub();
   }
-  shouldComponentUpdate() {
 
-    return true;
-  }
 
   render() {
     const { assignments, notifications } = this.props;
     return (
       <div className="bidding-page">
-        <CustomizedSnackbars notifications={notifications} onClose={this.onClose} />
+        <NotificationQueue notifications={notifications} onNotificationClose={this.onClose} onNotificationTimeout={this.onClose} />
         <BiddingSummary assignments={assignments} />
         <BiddingDashboard />
       </div>

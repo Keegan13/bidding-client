@@ -1,6 +1,8 @@
 import { resolveAction, dateReceivedPipe } from './helpers';
 import { API_ACTION_TYPES as ApiTypes } from './constants';
 import api from './index';
+import * as _ from 'lodash';
+
 
 /**
  * Makes asynchronous request to place bet endpoint
@@ -12,20 +14,21 @@ import api from './index';
  * @return {function}  - that handled by react-thunk middleware 
  */
 export function placeBetThunk(assignmentId, volume, odds) {
-    return (dispatch) => {
+
+    return async (dispatch) => {
         dispatch(resolveAction(ApiTypes.SPLIT_BID_PENDING));
-        api.placeBet(assignmentId, volume, odds)
-            .then(res => {
-                if (res.error) {
-                    throw (res.error);
-                }
-                res = dateReceivedPipe(res);
-                dispatch(resolveAction(ApiTypes.SPLIT_BID_SUCCESS, res));
-                return res;
-            })
-            .catch(error => {
-                dispatch(resolveAction(ApiTypes.SPLIT_BID_ERROR, error));
-            })
+        try {
+            let data = await api.placeBet(assignmentId, volume, odds);
+            if (data.error) {
+                throw (data.error);
+            }
+            data = dateReceivedPipe(data);
+            dispatch(resolveAction(ApiTypes.SPLIT_BID_SUCCESS, data));
+            return data;
+
+        } catch (error) {
+            dispatch(resolveAction(ApiTypes.SPLIT_BID_ERROR, error));
+        }
     };
 }
 
@@ -35,21 +38,23 @@ export function placeBetThunk(assignmentId, volume, odds) {
  * @return {function}  - that accepts  dispatch as parameter and makes asynchronous call to api
  */
 export function loadAssignmentsThunk() {
-    return (dispatch) => {
+    return async (dispatch) => {
 
         dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_PENDING));
-        api.loadAssignments()
-            .then(res => {
-                if (res.error) {
-                    throw (res.error);
-                }
-                res = dateReceivedPipe(res);
-                dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_SUCCESS, res));
-                return res;
-            })
-            .catch(error => {
-                dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_ERROR, error));
-            })
+
+        try {
+            let res = await api.loadAssignments();
+
+            if (res.error) {
+                throw (res.error);
+            }
+            res = dateReceivedPipe(res);
+            dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_SUCCESS, res));
+            return res;
+        }
+        catch (error) {
+            dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_ERROR, error));
+        }
     };
 }
 
@@ -59,21 +64,22 @@ export function loadAssignmentsThunk() {
  * @return {function}  - that accepts  dispatch as parameter and makes asynchronous call to api
  */
 export function loadOrReloadAssignmentThunk(assignmentId) {
-    return (dispatch) => {
-
+    return async (dispatch) => {
         dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_PENDING));
-        api.loadAssignment(assignmentId)
-            .then(res => {
-                if (res.error) {
-                    throw (res.error);
-                }
-                res = dateReceivedPipe(res);
-                dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_SUCCESS, res));
-                return res;
-            })
-            .catch(error => {
-                dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_ERROR, error));
-            })
+        try {
+            let res = await api.loadAssignment(assignmentId)
+
+            if (res.error) {
+                throw (res.error);
+            }
+            res = dateReceivedPipe(res);
+            dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_SUCCESS, res));
+            return res;
+        }
+        catch (error) {
+            dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_ERROR, error));
+
+        }
     };
 }
 
@@ -84,20 +90,20 @@ export function loadOrReloadAssignmentThunk(assignmentId) {
  * @return {function}  - that accepts  dispatch as parameter and makes asynchronous call to api
  */
 export function addCommentThunk(assignmentId, text) {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(resolveAction(ApiTypes.ADD_COMMENT_PENDING));
-        api.addComment(assignmentId, text)
-            .then(res => {
-                if (res.error) {
-                    throw (res.error);
-                }
-                res = dateReceivedPipe(res);
-                dispatch(resolveAction(ApiTypes.ADD_COMMENT_SUCCESS, res));
-                return res;
-            })
-            .catch(error => {
-                dispatch(resolveAction(ApiTypes.ADD_COMMENT_ERROR, error));
-            })
+        try {
+            let res = await api.addComment(assignmentId, text);
+            if (res.error) {
+                throw (res.error);
+            }
+            res = dateReceivedPipe(res);
+            dispatch(resolveAction(ApiTypes.ADD_COMMENT_SUCCESS, res));
+
+            return res;
+        } catch (error) {
+            dispatch(resolveAction(ApiTypes.ADD_COMMENT_ERROR, error));
+        }
     };
 }
 
@@ -107,19 +113,20 @@ export function addCommentThunk(assignmentId, text) {
  * @return {function}  - that accepts  dispatch as parameter and makes asynchronous call to api
  */
 export function setAssignmentStatusThunk(assignmentId, status) {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_PENDING));
-        api.setStatus(assignmentId, status)
-            .then(res => {
-                if (res.error) {
-                    throw (res.error);
-                }
-                res = dateReceivedPipe(res);
-                dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_SUCCESS, res));
-                return res;
-            })
-            .catch(error => {
-                dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_ERROR, error));
-            })
+
+        try {
+            let res = await api.setStatus(assignmentId, status);
+            if (res.error) {
+                throw (res.error);
+            }
+            res = dateReceivedPipe(res);
+            dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_SUCCESS, res));
+            return res;
+
+        } catch (error) {
+            dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_ERROR, error));
+        }
     };
 }

@@ -1,5 +1,5 @@
-.bidding-container {
-  border: 2px solid gray;
+.card-wrapper {
+  background-color: white;
 }
 
 .bidding-card {
@@ -7,14 +7,12 @@
   &:hover {
     cursor: pointer;
     box-shadow: gray 0px 0px 5px 5px;
-    border: 2px solid white;
   }
   display: inline-block;
   margin: 20px;
   padding: 5px;
   width: 350px;
   height: 210px;
-  border: 2px solid #321321;
 
   &.selected {
     border-color: red;

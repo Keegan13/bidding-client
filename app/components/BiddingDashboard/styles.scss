@@ -2,9 +2,6 @@
   display: flex;
   flex-direction: row;
   .dashboard-column {
-    &:hover {
-      background-color: lightsalmon;
-    }
     display: flex;
     flex-direction: column;
     .div {
@@ -12,8 +9,3 @@
     }
   }
 }
-
-// display: flex;
-// flex-direction: column;
-// flex-basis: 100%;
-// flex: 1;

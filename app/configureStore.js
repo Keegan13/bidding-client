@@ -16,31 +16,33 @@ export default function configureStore(initialState = {}) {
     [API_ACTION_TYPES.ADD_COMMENT_ERROR]: {
       message: 'Cannot add comment',
       type: NOTIFICATION_TYPES.ERROR,
-      timeout: 20000,
+      timeout: 10000,
       level: 50
     },
     [API_ACTION_TYPES.SPLIT_BID_ERROR]: {
       message: 'Cannot place bet',
       type: NOTIFICATION_TYPES.ERROR,
-      timeout: 20000,
+      timeout: 10000,
       level: 50
     },
     [API_ACTION_TYPES.SET_ASSIGNMENT_STATUS_ERROR]: {
       message: "Can't change status",
       type: NOTIFICATION_TYPES.ERROR,
-      timeout: 20000,
+      timeout: 10000,
       level: 50
-    },
-    [SELECT_ASSIGNMENT]: {
-      message: 'Item selected [Test]',
-      type: NOTIFICATION_TYPES.SUCCESS,
-      timeout: 20000,
-      level: 1000
     }
   };
 
 
-  const middleware = [logger, thunk, createNotificationMiddleware(notificationConfig)];
+  let middleware = [];
+
+  if (process.env.NODE_ENV !== 'production') {
+    middleware.push(logger);
+  }
+
+  middleware = [...middleware, thunk, createNotificationMiddleware(notificationConfig)];
+
+
   const enhancers = [applyMiddleware(...middleware)];
 
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose
