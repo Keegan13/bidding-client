@@ -13,8 +13,7 @@ export default function createReducer(injectedReducers = {}) {
 
   const rootReducer = combineReducers({
     bidding: biddingReducer,
-    ...injectedReducers,
-
+    ...injectedReducers
   });
 
   return rootReducer;

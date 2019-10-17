@@ -1,7 +1,7 @@
 import { API_ACTION_TYPES, API_SUFFIXES } from './constants';
 import * as  _ from 'lodash';
 import { addNotification } from 'actions';
-import { NOTIFICATION_TYPES } from 'constants/notifications';
+import { NOTIFICATION_TYPES } from 'constant';
 
 // const getLevelFromType = (type) => {
 //     with (NOTIFICATION_TYPES) {
@@ -31,6 +31,5 @@ export const createNotificationMiddleware = (config = {}) => {
         return next(action);
     };
 };
-
 
 export default createNotificationMiddleware;

@@ -44,9 +44,10 @@ export function removeAssignment(assignmentId) {
 
 
 /**
- * Dispatched an action to remove assignment from UI
+ * Dispatches an action, that adds  notification to 'notification' section of store
  * 
- * @param {string|number} assignmentId - id of an assignment to be removed
+ * @param {string} message - id of an assignment to be removed
+ * @param {type} type 
  * 
  * @return {object} An action object with a type of DESELECT_ASSIGNMENT
  */

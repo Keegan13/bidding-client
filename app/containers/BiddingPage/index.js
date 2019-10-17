@@ -14,8 +14,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 }, dispatch)
 
 const mapStateToProps = createStructuredSelector({
-    // loading: makeSelectLoading(),
-    // error: makeSelectError(),
     assignments: makeSelectAssignments(),
     assignment: makeSelectSelectedAssignment(),
     notifications: makeSelectNotifications()

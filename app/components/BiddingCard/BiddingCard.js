@@ -8,6 +8,7 @@ import Countdown from 'react-countdown-now';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import LoadingIndicator from 'components/LoadingIndicator';
 import { ASSIGNMENT_STATUSES } from 'models';
+import { AssignmentPropType } from '../../models';
 
 const STATUSES = {
   pending: "pending",
@@ -67,8 +68,7 @@ const getStatusClass = (assignment) => {
   return STATUSES.pending;
 };
 
-const BiddingCard = (props) => {
-  const { assignment } = props;
+const BiddingCard = ({ assignment, ...other }) => {
 
   if (!assignment) {
     return <LoadingIndicator />;
@@ -107,7 +107,7 @@ const BiddingCard = (props) => {
   };
 
   return (<Card
-    className={`bidding-card ${status} ${timeout ? 'timeout' : null}`} {...props}>
+    className={`bidding-card ${status} ${timeout ? 'timeout' : null}`} {...other}>
 
     <h4>{assignment.location}</h4>
     <Countdown
@@ -136,7 +136,7 @@ const BiddingCard = (props) => {
 };
 
 BiddingCard.propTypes = {
-  item: PropTypes.object
+  assignment: AssignmentPropType.isRequired
 };
 
 export default BiddingCard;

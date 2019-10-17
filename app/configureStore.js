@@ -6,7 +6,7 @@ import createReducer from './reducers';
 import logger from 'redux-logger'
 import thunk from 'redux-thunk';
 import { createNotificationMiddleware } from 'api/apiMiddleware';
-import { NOTIFICATION_TYPES } from './constants';
+import { NOTIFICATION_TYPES } from 'constant';
 import { API_ACTION_TYPES } from './api/constants';
 import { SELECT_ASSIGNMENT } from './actions';
 

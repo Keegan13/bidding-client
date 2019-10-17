@@ -10,14 +10,15 @@ import IconButton from '@material-ui/core/IconButton';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
+import { NOTIFICATION_TYPES } from 'constant';
+import { NotificationPropType } from 'models';
 
 const variantIcon = {
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  error: ErrorIcon,
-  info: InfoIcon,
+  [NOTIFICATION_TYPES.SUCCESS]: CheckCircleIcon,
+  [NOTIFICATION_TYPES.WARNING]: WarningIcon,
+  [NOTIFICATION_TYPES.ERROR]: ErrorIcon,
+  [NOTIFICATION_TYPES.INFO]: InfoIcon,
 };
-
 const useStyles = makeStyles(theme => ({
   success: {
     backgroundColor: green[600],
@@ -100,8 +101,7 @@ Notification.propTypes = {
   onClose: PropTypes.func,
   onClick: PropTypes.func,
   onTimeout: PropTypes.func,
-  notification: PropTypes.object.isRequired,
-  variant: PropTypes.oneOf(['error', 'info', 'success', 'warning']).isRequired,
+  notification: NotificationPropType.isRequired
 };
 
 export default Notification;
