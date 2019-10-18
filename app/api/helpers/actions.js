@@ -7,15 +7,16 @@ function apiPending(actionType) {
   };
 }
 
-function apiSuccess(actionType, { payload }) {
+function apiSuccess(actionType, payload) {
   return {
     type: actionType,
     payload
   };
 }
-function apiError(actionType, { error }) {
+function apiError(actionType, { error, failedAction }) {
   return {
     type: actionType,
+    failedAction,
     error
   };
 }
@@ -25,19 +26,20 @@ function apiError(actionType, { error }) {
  *
  * @param {string} actionType - redux action type
  * @param {any} [params] - nothing for '*_PENDING' | response for '*_SUCCESS' | error for '*_ERROR'.
+ * @param {error} error - error
  * @returns {object} - action
  */
-export function resolveAction(actionType, params) {
+export function resolveAction(actionType, { payload, error, failedAction } = {}) {
   if (actionType.endsWith(API_SUFFIXES.PENDING, actionType.length)) {
     return apiPending(actionType);
   }
 
   if (actionType.endsWith(API_SUFFIXES.ERROR, actionType.length)) {
-    return apiError(actionType, { error: params });
+    return apiError(actionType, { error, failedAction });
   }
 
   if (actionType.endsWith(API_SUFFIXES.SUCCESS, actionType.length)) {
-    return apiSuccess(actionType, { payload: params });
+    return apiSuccess(actionType, payload);
   }
 
   return { type: '' };

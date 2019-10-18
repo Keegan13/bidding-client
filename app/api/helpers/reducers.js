@@ -16,6 +16,7 @@ function failureHandler(state, action) {
     ...state,
     errorObject: action.payload,
     error: action.error,
+    failedActions: [...state.failedActions, action.failedAction],
     [convertToErrorAction(action.type)]: false,
     pending: false
   };
@@ -46,9 +47,7 @@ function getApiActionHandler(type, handler = null) {
     return failureHandler;
   }
 
-  return (state, action) => {
-    return state;
-  };
+  return (state, action) => state;
 }
 
 /**

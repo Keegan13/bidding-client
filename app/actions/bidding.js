@@ -1,5 +1,5 @@
 import {
-  SELECT_ASSIGNMENT, DESELECT_ASSIGNMENT, REMOVE_ASSIGNMENT, REMOVE_NOTIFICATION, ADD_NOTIFICATION
+  SELECT_ASSIGNMENT, DESELECT_ASSIGNMENT, REMOVE_ASSIGNMENT, REMOVE_NOTIFICATION, ADD_NOTIFICATION, REMOVE_FAILED_ACTION
 } from './types';
 
 /**
@@ -79,6 +79,31 @@ export function removeNotification(id) {
     id
   };
 }
+
+
+/**
+ * Dispatched an action to remove assignment from UI
+ *
+ * @param {string|number} assignmentId - id of an assignment to be removed
+ *
+ * @return {object} An action object with a type of DESELECT_ASSIGNMENT
+ */
+export function retryAction(failedAction) {
+  return {
+    type: failedAction.type,
+    ...failedAction.parameters,
+    failedId: failedAction.id
+  };
+}
+
+
+export function removeFailedAction(id) {
+  return {
+    type: REMOVE_FAILED_ACTION,
+    failedId: id
+  };
+}
+
 
 // /**
 //  * Dispatched an action to remove assignment from UI

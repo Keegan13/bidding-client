@@ -3,7 +3,9 @@ import { compose, bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { loadAssignmentsThunk } from 'api/thunks';
 import { selectAssignment, deselectAssignment, removeAssignment } from 'actions';
-import { makeSelectSelectedAssignment, makeSelectAssignments, makeSelectCutters } from 'selectors/bidding';
+import {
+  makeSelectSelectedAssignment, makeSelectAssignments, makeSelectCutters, makeSelectFailedActions
+} from 'selectors/bidding';
 import BiddingDashboard from './BiddingDashboard';
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
@@ -16,7 +18,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 const mapStateToProps = createStructuredSelector({
   assignments: makeSelectAssignments(),
   cutters: makeSelectCutters(),
-  assignment: makeSelectSelectedAssignment()
+  assignment: makeSelectSelectedAssignment(),
+  failed: makeSelectFailedActions()
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

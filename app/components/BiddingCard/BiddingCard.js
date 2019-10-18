@@ -9,6 +9,9 @@ import Countdown from 'react-countdown-now';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import LoadingIndicator from 'components/LoadingIndicator';
 import { ASSIGNMENT_STATUSES, AssignmentPropType } from 'models';
+import { IconButton } from '@material-ui/core';
+import WarningIcon from '@material-ui/icons/Warning';
+import { classes } from 'istanbul-lib-coverage';
 
 
 const STATUSES = {
@@ -69,23 +72,31 @@ const getStatusClass = (assignment) => {
   return STATUSES.pending;
 };
 
-const BiddingCard = ({ assignment, ...other }) => {
+const BiddingCard = ({ assignment, withWarning, ...other }) => {
   if (!assignment) {
     return <LoadingIndicator />;
   }
 
-  const [status, setStatus] = useState(getStatusClass(assignment));
-  const [progress, setProgress] = useState(getAssignmentProgress(assignment));
-  const [timeout, setTimeout] = useState(isTimeOut(assignment));
+  const [state, setState] = useState({
+    status: getStatusClass(assignment),
+    progress: getAssignmentProgress(assignment),
+    timeout: isTimeOut(assignment)
+  });
 
   useEffect(() => {
-    setStatus(getStatusClass(assignment));
-    setProgress(getAssignmentProgress(assignment));
-  }, [assignment]);
+    setState((prevState) => ({
+      ...prevState,
+      status: getStatusClass(assignment),
+      progress: getAssignmentProgress(assignment)
+    }));
+  }, [assignment, withWarning]);
 
   const onCountdownCompleteHandler = (value) => {
     if (value.completed) {
-      setTimeout(true);
+      setState((state) => ({
+        ...state,
+        timeout: true
+      }));
     }
   };
 
@@ -109,11 +120,17 @@ const BiddingCard = ({ assignment, ...other }) => {
 
   return (
     <Card
-      className={`bidding-card ${status} ${timeout ? 'timeout' : null}`}
+      className={`bidding-card ${state.status} ${state.timeout ? 'timeout' : null}`}
       {...other}
     >
-
       <h4>{assignment.location}</h4>
+
+      {withWarning ? (
+        <div className={'errorWrapper'}>
+          <WarningIcon fontSize="large" />
+        </div>
+      ) : null
+      }
       <Countdown
         date={moment(assignment.startDateTime).valueOf() + assignment.timeSpan}
         renderer={countDownRenderer}
@@ -134,7 +151,7 @@ const BiddingCard = ({ assignment, ...other }) => {
       <BorderLinearProgress
         variant="determinate"
         color="secondary"
-        value={progress}
+        value={state.progress}
       />
     </Card>
   );

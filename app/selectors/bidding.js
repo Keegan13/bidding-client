@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { convertToErrorAction } from 'api/helpers';
+import { ASSIGNMENT_STATUSES } from 'models';
 
 const selectBidding = (state) => state.bidding;
 
@@ -38,6 +39,23 @@ const makeSelectSelectedAssignment = () => createSelector(
   }
 );
 
+const getAssignmentStatus = (assignment) => {
+  if (assignment.status) {
+    return assignment.status;
+  }
+
+  if (!assignment.placedBet || assignment.placedBet.length === 0) {
+    return ASSIGNMENT_STATUSES.TO_BE_PLACED;
+  }
+
+  if (assignment.placedBet.reduce((agg, next) => agg += next.volume, 0) >= assignment.amount) {
+    return ASSIGNMENT_STATUSES.PLACED;
+  }
+
+  return ASSIGNMENT_STATUSES.PENDING;
+};
+
+
 const makeSelectError = (actionType) => createSelector(
   selectBidding,
   (biddingSection) => {
@@ -46,6 +64,10 @@ const makeSelectError = (actionType) => createSelector(
   }
 );
 
+const makeSelectFailedActions = () => createSelector(
+  selectBidding,
+  (biddingSection) => biddingSection.failedActions
+);
 
 const makeSelectCutters = () => createSelector(
   selectBidding,
@@ -64,5 +86,7 @@ export {
   makeSelectSelectedAssignment,
   makeSelectAssignment,
   makeSelectCutters,
-  makeSelectNotifications
+  makeSelectNotifications,
+  getAssignmentStatus,
+  makeSelectFailedActions
 };

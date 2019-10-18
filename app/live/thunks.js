@@ -23,6 +23,7 @@ export function connectToHubThunk() {
       })
       .catch((error) => {
         dispatch(hubConnectionError(error));
+        console.error(error);
       });
   };
 }

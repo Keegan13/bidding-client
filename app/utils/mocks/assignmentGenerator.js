@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 export function generateBets(count, assignmentId) {
   const data = [];
 
-  for (let i = 0; i < count; i+=1) {
+  for (let i = 0; i < count; i += 1) {
     data.push({
       id: faker.random.number(1000000),
       volume: faker.random.number({ min: 1, max: 30 }) * 1000,
@@ -37,7 +37,7 @@ export function generateAssignment(id, status) {
     assignment.placedBets.length = 0;
   }
 
-  assignment.amount = assignment.placedBets.reduce((agg, next) => { return agg += next.volume; }, 0) + faker.random.number({ min: 1, max: 10 }) * 1000;
+  assignment.amount = assignment.placedBets.reduce((agg, next) => agg += next.volume, 0) + faker.random.number({ min: 1, max: 10 }) * 1000;
 
   return assignment;
 }

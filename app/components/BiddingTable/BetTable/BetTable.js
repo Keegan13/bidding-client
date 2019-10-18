@@ -14,7 +14,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import {BetPropType} from 'models';
+import { BetPropType } from 'models';
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -164,7 +164,7 @@ const CustomPaginationActionsTable = ({ bets }) => {
       </div>
     </Paper>
   );
-}
+};
 
 CustomPaginationActionsTable.propTypes = {
   bets: PropTypes.arrayOf(BetPropType.isRequired).isRequired

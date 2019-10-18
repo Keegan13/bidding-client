@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { removeFailedAction } from 'actions';
 import { resolveAction, dateReceivedPipe } from './helpers';
 import { API_ACTION_TYPES as ApiTypes } from './constants';
 import api from './index';
@@ -22,10 +23,19 @@ export function placeBetThunk(assignmentId, volume, odds) {
         throw (data.error);
       }
       data = dateReceivedPipe(data);
-      dispatch(resolveAction(ApiTypes.SPLIT_BID_SUCCESS, data));
+      dispatch(resolveAction(ApiTypes.SPLIT_BID_SUCCESS, { payload: data }));
       return data;
     } catch (error) {
-      dispatch(resolveAction(ApiTypes.SPLIT_BID_ERROR, error));
+      const failedAction = {
+        id: Date.now(),
+        message: 'Failed to place bet!',
+        retry: placeBetThunk.bind(this, assignmentId, volume, odds),
+        retryFunctionName: placeBetThunk.name,
+        parameters: { assignmentId, volume, odds },
+        actionType: ApiTypes.SPLIT_BID_ERROR,
+        dateFailed: new Date(Date.now())
+      };
+      dispatch(resolveAction(ApiTypes.SPLIT_BID_ERROR, { error, failedAction }));
     }
   };
 }
@@ -40,16 +50,25 @@ export function loadAssignmentsThunk() {
     dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_PENDING));
 
     try {
-      let res = await api.loadAssignments();
+      let response = await api.loadAssignments();
 
-      if (res.error) {
-        throw (res.error);
+      if (response.error) {
+        throw (response.error);
       }
-      res = dateReceivedPipe(res);
-      dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_SUCCESS, res));
-      return res;
+      response = dateReceivedPipe(response);
+      dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_SUCCESS, { payload: response }));
+      return response;
     } catch (error) {
-      dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_ERROR, error));
+      const failedAction = {
+        id: Date.now(),
+        message: 'Failed to load assignments',
+        retry: loadAssignmentsThunk.bind(this),
+        retryFunctionName: loadAssignmentsThunk.name,
+        parameters: {},
+        actionType: ApiTypes.LOAD_ASSIGNMENTS_ERROR,
+        dateFailed: new Date(Date.now())
+      };
+      dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENTS_ERROR, { error, failedAction }));
     }
   };
 }
@@ -63,16 +82,26 @@ export function loadOrReloadAssignmentThunk(assignmentId) {
   return async (dispatch) => {
     dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_PENDING));
     try {
-      let res = await api.loadAssignment(assignmentId);
+      let response = await api.loadAssignment(assignmentId);
 
-      if (res.error) {
-        throw (res.error);
+      if (response.error) {
+        throw (response.error);
       }
-      res = dateReceivedPipe(res);
-      dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_SUCCESS, res));
-      return res;
+      response = dateReceivedPipe(response);
+      dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_SUCCESS, { payload: response }));
+      return response;
     } catch (error) {
-      dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_ERROR, error));
+      const failedAction = {
+        id: Date.now(),
+        message: 'Failed to update assignment',
+        retry: loadOrReloadAssignmentThunk.bind(this, assignmentId),
+        retryFunctionName: loadOrReloadAssignmentThunk.name,
+        parameters: { assignmentId },
+        actionType: ApiTypes.LOAD_ASSIGNMENT_ERROR,
+        dateFailed: new Date(Date.now())
+      };
+
+      dispatch(resolveAction(ApiTypes.LOAD_ASSIGNMENT_ERROR, { error, failedAction }));
     }
   };
 }
@@ -87,16 +116,26 @@ export function addCommentThunk(assignmentId, text) {
   return async (dispatch) => {
     dispatch(resolveAction(ApiTypes.ADD_COMMENT_PENDING));
     try {
-      let res = await api.addComment(assignmentId, text);
-      if (res.error) {
-        throw (res.error);
+      let response = await api.addComment(assignmentId, text);
+      if (response.error) {
+        throw (response.error);
       }
-      res = dateReceivedPipe(res);
-      dispatch(resolveAction(ApiTypes.ADD_COMMENT_SUCCESS, res));
+      response = dateReceivedPipe(response);
+      dispatch(resolveAction(ApiTypes.ADD_COMMENT_SUCCESS, { payload: response }));
 
-      return res;
+      return response;
     } catch (error) {
-      dispatch(resolveAction(ApiTypes.ADD_COMMENT_ERROR, error));
+      const failedAction = {
+        id: Date.now(),
+        message: 'Failed to add comment',
+        retry: addCommentThunk.bind(this, assignmentId, text),
+
+        retryFunctionName: addCommentThunk.name,
+        parameters: { assignmentId, text },
+        actionType: ApiTypes.ADD_COMMENT_ERROR,
+        dateFailed: new Date(Date.now())
+      };
+      dispatch(resolveAction(ApiTypes.ADD_COMMENT_ERROR, { error, failedAction }));
     }
   };
 }
@@ -111,15 +150,39 @@ export function setAssignmentStatusThunk(assignmentId, status) {
     dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_PENDING));
 
     try {
-      let res = await api.setStatus(assignmentId, status);
-      if (res.error) {
-        throw (res.error);
+      let response = await api.setStatus(assignmentId, status);
+      if (response.error) {
+        throw (response.error);
       }
-      res = dateReceivedPipe(res);
-      dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_SUCCESS, res));
-      return res;
+      response = dateReceivedPipe(response);
+      dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_SUCCESS, { payload: response }));
+      return response;
     } catch (error) {
-      dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_ERROR, error));
+      const failedAction = {
+        id: Date.now(),
+        message: 'Failed to change assignment status',
+        retry: setAssignmentStatusThunk.bind(this, assignmentId, status),
+
+        retryFunctionName: setAssignmentStatusThunk.name,
+        parameters: { assignmentId, status },
+        actionType: ApiTypes.SET_ASSIGNMENT_STATUS_ERROR,
+        dateFailed: new Date(Date.now())
+      };
+      dispatch(resolveAction(ApiTypes.SET_ASSIGNMENT_STATUS_ERROR, { error, failedAction }));
     }
+  };
+}
+
+/**
+ * Repeats failed action
+ *
+ * @param {object} failedAction - action with id and retry
+ *
+ * @return {function}  - that accepts  dispatch as parameter and retry to call previously failed thunk/action
+ */
+export function retryRequestThunk(failedAction) {
+  return async (dispatch) => {
+    dispatch(removeFailedAction(failedAction.id));
+    await failedAction.retry()(dispatch);
   };
 }

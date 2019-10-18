@@ -13,24 +13,24 @@ import { API_ACTION_TYPES } from './api/constants';
 
 export default function configureStore(initialState = {}) {
   const notificationConfig = {
-    [API_ACTION_TYPES.ADD_COMMENT_ERROR]: {
-      message: 'Cannot add comment',
-      type: NOTIFICATION_TYPES.ERROR,
-      timeout: 10000,
-      level: 50
-    },
-    [API_ACTION_TYPES.SPLIT_BID_ERROR]: {
-      message: 'Cannot place bet',
-      type: NOTIFICATION_TYPES.ERROR,
-      timeout: 10000,
-      level: 50
-    },
-    [API_ACTION_TYPES.SET_ASSIGNMENT_STATUS_ERROR]: {
-      message: "Can't change status",
-      type: NOTIFICATION_TYPES.ERROR,
-      timeout: 10000,
-      level: 50
-    }
+    // [API_ACTION_TYPES.ADD_COMMENT_ERROR]: {
+    //   message: 'Cannot add comment',
+    //   type: NOTIFICATION_TYPES.ERROR,
+    //   timeout: 10000,
+    //   level: 50
+    // },
+    // [API_ACTION_TYPES.SPLIT_BID_ERROR]: {
+    //   message: 'Cannot place bet',
+    //   type: NOTIFICATION_TYPES.ERROR,
+    //   timeout: 10000,
+    //   level: 50
+    // },
+    // [API_ACTION_TYPES.SET_ASSIGNMENT_STATUS_ERROR]: {
+    //   message: "Can't change status",
+    //   type: NOTIFICATION_TYPES.ERROR,
+    //   timeout: 10000,
+    //   level: 50
+    // }
   };
 
 

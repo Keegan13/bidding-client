@@ -43,3 +43,16 @@ export const AssignmentPropType = PropTypes.shape({
   timeSpan: PropTypes.number.isRequired,
   placedBets: PropTypes.arrayOf(BetPropType)
 });
+
+/**
+ * Failed action model validation
+ */
+export const FailedActionPropType = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  actionType: PropTypes.string,
+  parameters: PropTypes.object,
+  message: PropTypes.string.isRequired,
+  parameters: PropTypes.object,
+  retryFunctionName: PropTypes.string,
+  retry: PropTypes.func
+});

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import BiddingCard from 'components/BiddingCard';
 import LoadingIndicator from 'components/LoadingIndicator';
-import BetForm from './BetForm';
-import BetTable from './BetTable';
-import StatusSwitch from './StatusSwitch';
+import RetryNotification from 'components/RetryNotification';
 import PropTypes from 'prop-types';
 import { AssignmentPropType } from 'models';
 import './style.scss';
 import { makeStyles } from '@material-ui/core';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import StatusSwitch from './StatusSwitch';
+import BetTable from './BetTable';
+import BetForm from './BetForm';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -26,10 +27,10 @@ const getAmountLeft = (assignment) => {
   const placed = assignment.placedBets.reduce((agg, next) => agg += next.volume, 0);
   return assignment.amount - placed;
 };
-const BiddingTable = ({ assignment, onClose, setStatus, addComment }) => {
-
+const BiddingTable = ({
+  assignment, setStatus, addComment, failed, removeRetry, retry
+}) => {
   const [text, setText] = useState('');
-
   const classes = useStyles();
 
   const onAddComment = (id) => {
@@ -41,21 +42,25 @@ const BiddingTable = ({ assignment, onClose, setStatus, addComment }) => {
     setText(value);
   };
 
+
   if (!assignment) {
     return <LoadingIndicator />;
   }
 
+  const failedForCurrent = failed.filter((x) => x.parameters.assignmentId === assignment.id);
+  const withWarning = failedForCurrent.length > 0;
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.column}>
-        <BiddingCard assignment={assignment} />
+        {failedForCurrent.map((item) => (<RetryNotification key={item.id} action={item} onClose={() => { removeRetry(item.id); }} onRetry={() => { retry(item); }} />))}
+        <BiddingCard assignment={assignment} withWarning={withWarning} />
         <StatusSwitch assignment={assignment} onStatusChange={({ assignmentId, status }) => setStatus(assignmentId, status)} />
         <div>
           <p>Comments</p>
           {assignment.comments ? assignment.comments.map((item) => <p key={item.id}>{item.text}</p>
           ) : null}
 
-          
           <TextareaAutosize rows={4} className="feedback-area" value={text} onChange={onTextChange}></TextareaAutosize>
         </div>
         <button type="button" onClick={() => onAddComment(assignment.id)}>Add</button>
@@ -72,10 +77,9 @@ const BiddingTable = ({ assignment, onClose, setStatus, addComment }) => {
           <BetTable bets={assignment.placedBets}></BetTable>
         </div>
       </div>
-    </div >
+    </div>
   );
-
-}
+};
 
 BiddingTable.propTypes = {
   assignment: AssignmentPropType.isRequired,

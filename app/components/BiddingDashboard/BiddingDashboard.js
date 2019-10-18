@@ -1,29 +1,15 @@
 import IconButton from '@material-ui/core/IconButton';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PhoneIcon from '@material-ui/icons/Phone';
 import BiddingCard from 'components/BiddingCard';
 import BiddingTable from 'components/BiddingTable';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
 import { AssignmentPropType, CutterPropType } from 'models';
-import CloseIcon from '@material-ui/icons/Close';
-
-// const groupByCutter = (assignments) => {
-//   var grouping = [];
-//   const groupObject = _.groupBy(assignments, x => x.cutterId);
-//   Object.keys(groupObject).forEach(function (prop) {
-//     grouping.push({
-//       key: prop,
-//       items: _.orderBy(groupObject[prop], (item) => {
-//         return moment(item.receivedDate).valueOf();
-//       })
-//     })
-//   });
-
-//   return grouping;
-// };
+import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
+import { FailedActionPropType } from '../../models/AppPropTypes';
 
 function getModalStyle() {
   return {
@@ -80,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const BiddingDashboard = ({
-  assignments, selectAssignment, deselectAssignment, removeAssignment, cutters
+  assignments, selectAssignment, deselectAssignment, removeAssignment, cutters, failed
 }) => {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -95,7 +81,6 @@ const BiddingDashboard = ({
     setOpen(false);
     deselectAssignment();
   };
-
 
   if (!assignments) {
     return <h2>No assignments yet!</h2>;
@@ -120,7 +105,12 @@ const BiddingDashboard = ({
                   <IconButton aria-label="delete" onClick={() => removeAssignment(item.id)} className={classes.removeButton}>
                     <DeleteIcon fontSize="large" />
                   </IconButton>
-                  <BiddingCard assignment={item} key={item.id} onClick={() => handleOpen(item.id)} />
+                  <BiddingCard
+                    withWarning={failed.some((f) => f.parameters.assignmentId === item.id)}
+                    key={item.id}
+                    assignment={item}
+                    onClick={() => handleOpen(item.id)}
+                  />
                 </div>
               ))
             }
@@ -131,12 +121,10 @@ const BiddingDashboard = ({
         open={open}
         onClose={handleClose}
       >
-
         <div style={modalStyle} className={classes.paper}>
           <IconButton className={classes.closeButton} aria-label="close" onClick={handleClose}>
             <CloseIcon fontSize="large" />
           </IconButton>
-
           <BiddingTable onClose={handleClose} />
         </div>
       </Modal>
@@ -150,7 +138,8 @@ BiddingDashboard.propTypes = {
   selectAssignment: PropTypes.func.isRequired,
   deselectAssignment: PropTypes.func.isRequired,
   removeAssignment: PropTypes.func.isRequired,
-  cutters: PropTypes.arrayOf(CutterPropType).isRequired
+  cutters: PropTypes.arrayOf(CutterPropType).isRequired,
+  failed: PropTypes.arrayOf(FailedActionPropType)
 };
 
 export default BiddingDashboard;

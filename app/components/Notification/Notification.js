@@ -19,6 +19,7 @@ const variantIcon = {
   [NOTIFICATION_TYPES.ERROR]: ErrorIcon,
   [NOTIFICATION_TYPES.INFO]: InfoIcon,
 };
+
 const useStyles = makeStyles((theme) => ({
   success: {
     backgroundColor: green[600],
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Notification({
-  className, notification, onClose, onClick, onTimeout, variant, ...other
+  className, notification, onClose, onClick, onTimeout, variant, children, ...other
 }) {
   const classes = useStyles();
   const {
@@ -97,6 +98,8 @@ function Notification({
       ]}
       {...other}
     />
+
+
   );
 }
 
