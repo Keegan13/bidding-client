@@ -7,7 +7,8 @@ import BiddingCard from 'components/BiddingCard';
 import BiddingTable from 'components/BiddingTable';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { AssignmentPropType ,CutterPropType} from 'models';
+import { AssignmentPropType, CutterPropType } from 'models';
+import CloseIcon from '@material-ui/icons/Close';
 
 // const groupByCutter = (assignments) => {
 //   var grouping = [];
@@ -32,7 +33,7 @@ function getModalStyle() {
   };
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
     width: 'auto',
@@ -68,11 +69,19 @@ const useStyles = makeStyles(theme => ({
     zIndex: '2',
     borderRadius: '14px',
     padding: '6px'
+  },
+  closeButton: {
+    position: 'absolute',
+    top: '-10px',
+    right: '-10px',
+    zIndex: 10
   }
 }));
 
 
-const BiddingDashboard = ({ assignments, selectAssignment, deselectAssignment, removeAssignment, cutters }) => {
+const BiddingDashboard = ({
+  assignments, selectAssignment, deselectAssignment, removeAssignment, cutters
+}) => {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle);
@@ -95,8 +104,8 @@ const BiddingDashboard = ({ assignments, selectAssignment, deselectAssignment, r
   return (
     <div className={classes.wrapper}>
       {
-        cutters.map(cutter =>
-          (<div className={classes.column} id={`cutter-${cutter.id}`} key={cutter.id}>
+        cutters.map((cutter) => (
+          <div className={classes.column} id={`cutter-${cutter.id}`} key={cutter.id}>
             <div className={classes.cutter}>
               <h2 style={{ display: 'inline-block' }}>
                 Cutter {cutter.id}
@@ -106,25 +115,34 @@ const BiddingDashboard = ({ assignments, selectAssignment, deselectAssignment, r
               </IconButton>
             </div>
             {
-              assignments.filter(x => x.cutterId == cutter.id).map(item => (<div style={{ position: 'relative' }} key={item.id}>
-                <IconButton aria-label="delete" onClick={() => removeAssignment(item.id)} className={classes.removeButton}>
-                  <DeleteIcon fontSize="large" />
-                </IconButton>
-                <BiddingCard assignment={item} key={item.id} onClick={() => handleOpen(item.id)} />
-              </div>))
+              assignments.filter((x) => x.cutterId == cutter.id).map((item) => (
+                <div style={{ position: 'relative' }} key={item.id}>
+                  <IconButton aria-label="delete" onClick={() => removeAssignment(item.id)} className={classes.removeButton}>
+                    <DeleteIcon fontSize="large" />
+                  </IconButton>
+                  <BiddingCard assignment={item} key={item.id} onClick={() => handleOpen(item.id)} />
+                </div>
+              ))
             }
           </div>
-          ))
+        ))
       }
       <Modal
         open={open}
-        onClose={handleClose}>
+        onClose={handleClose}
+      >
+
         <div style={modalStyle} className={classes.paper}>
-          <BiddingTable />
+          <IconButton className={classes.closeButton} aria-label="close" onClick={handleClose}>
+            <CloseIcon fontSize="large" />
+          </IconButton>
+
+          <BiddingTable onClose={handleClose} />
         </div>
       </Modal>
-    </div >)
-}
+    </div>
+  );
+};
 
 
 BiddingDashboard.propTypes = {

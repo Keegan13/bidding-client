@@ -3,20 +3,20 @@ import { compose, bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { loadAssignmentsThunk } from 'api/thunks';
 import { selectAssignment, deselectAssignment, removeAssignment } from 'actions';
-import BiddingDashboard from './BiddingDashboard';
 import { makeSelectSelectedAssignment, makeSelectAssignments, makeSelectCutters } from 'selectors/bidding';
+import BiddingDashboard from './BiddingDashboard';
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    selectAssignment: selectAssignment,
-    removeAssignment: removeAssignment,
-    deselectAssignment: deselectAssignment,
-    loadAssignments: loadAssignmentsThunk
-}, dispatch)
+  selectAssignment,
+  removeAssignment,
+  deselectAssignment,
+  loadAssignments: loadAssignmentsThunk
+}, dispatch);
 
 const mapStateToProps = createStructuredSelector({
-    assignments: makeSelectAssignments(),
-    cutters: makeSelectCutters(),
-    assignment: makeSelectSelectedAssignment()
+  assignments: makeSelectAssignments(),
+  cutters: makeSelectCutters(),
+  assignment: makeSelectSelectedAssignment()
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

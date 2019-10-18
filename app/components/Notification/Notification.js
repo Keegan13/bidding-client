@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -19,7 +19,7 @@ const variantIcon = {
   [NOTIFICATION_TYPES.ERROR]: ErrorIcon,
   [NOTIFICATION_TYPES.INFO]: InfoIcon,
 };
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   success: {
     backgroundColor: green[600],
   },
@@ -45,9 +45,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Notification({ className, notification, onClose, onClick, onTimeout, variant, ...other }) {
+function Notification({
+  className, notification, onClose, onClick, onTimeout, variant, ...other
+}) {
   const classes = useStyles();
-  const { id, timeout, message, level } = notification;
+  const {
+    id, timeout, message, type
+  } = notification;
 
   const handleTimeout = () => {
     if (onTimeout) {
@@ -71,23 +75,23 @@ function Notification({ className, notification, onClose, onClick, onTimeout, va
     }
   };
 
-  const Icon = variantIcon[variant];
+  const Icon = variantIcon[type];
 
   return (
     <SnackbarContent
-      className={clsx(classes[variant], className)}
+      className={clsx(classes[type], className)}
       onClick={handleClick}
       aria-describedby="client-snackbar"
-      message={
+      message={(
         <span id="client-snackbar" className={classes.message}>
           <Icon
             className={clsx(classes.icon, classes.iconVariant)}
           />
           {message}
         </span>
-      }
+      )}
       action={[
-        <IconButton key="close" aria-label="close" color="inherit" onClick={handleClose} >
+        <IconButton key="close" aria-label="close" color="inherit" onClick={handleClose}>
           <CloseIcon className={classes.icon} />
         </IconButton>,
       ]}

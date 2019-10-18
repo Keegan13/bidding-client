@@ -19,18 +19,18 @@
   }
 
   &.pending {
-    background-color: orange;
+    background-color: #ff9900;
   }
 
   &.placed {
-    background-color: lightgreen;
+    background-color: #009e0f;
   }
   &.to-be-placed {
-    background-color: lightskyblue;
+    background-color: #ffe599;
   }
 
   &.error {
-    background-color: hotpink;
+    background-color: #ea9999;
   }
 
   .countdown-text {

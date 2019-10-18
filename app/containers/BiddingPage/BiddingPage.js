@@ -7,20 +7,22 @@ import './style.scss';
 import { makeStyles } from '@material-ui/styles';
 import { NotificationPropType, AssignmentPropType } from 'models';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   biddingPage: {
     margin: '20px'
   }
 }));
 
-const BiddingPage = ({ notifications, assignments, loadAssignments, removeNotification, connectToHub }) => {
+const BiddingPage = ({
+  notifications, assignments, loadAssignments, removeNotification, connectToHub
+}) => {
   const classes = useStyles();
   const onClose = (id) => {
     removeNotification(id);
   };
 
   useEffect(() => {
-    //loadAssignments();
+    // loadAssignments();
     connectToHub();
   }, []);
 
@@ -31,16 +33,14 @@ const BiddingPage = ({ notifications, assignments, loadAssignments, removeNotifi
       <BiddingDashboard />
     </div>
   );
-}
+};
 
 
 BiddingPage.propTypes = {
-  loading: PropTypes.bool,
   notifications: PropTypes.arrayOf(NotificationPropType).isRequired,
   assignments: PropTypes.arrayOf(AssignmentPropType).isRequired,
-  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  on: PropTypes.func
+  removeNotification: PropTypes.func,
+  connectToHub: PropTypes.func,
 };
 
 export default BiddingPage;
-

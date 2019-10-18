@@ -1,17 +1,17 @@
 /**
  * Create the store with dynamic reducers
  */
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
-import createReducer from './reducers';
-import logger from 'redux-logger'
+import {
+  createStore, applyMiddleware, compose
+} from 'redux';
+import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { createNotificationMiddleware } from 'api/apiMiddleware';
 import { NOTIFICATION_TYPES } from 'constant';
+import createReducer from './reducers';
 import { API_ACTION_TYPES } from './api/constants';
-import { SELECT_ASSIGNMENT } from './actions';
 
 export default function configureStore(initialState = {}) {
-
   const notificationConfig = {
     [API_ACTION_TYPES.ADD_COMMENT_ERROR]: {
       message: 'Cannot add comment',
@@ -71,4 +71,3 @@ export default function configureStore(initialState = {}) {
 
   return store;
 }
-
