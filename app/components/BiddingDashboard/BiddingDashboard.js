@@ -1,34 +1,15 @@
 import IconButton from '@material-ui/core/IconButton';
-import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PhoneIcon from '@material-ui/icons/Phone';
 import BiddingCard from 'components/BiddingCard';
-import BiddingTable from 'components/BiddingTable';
 import { AssignmentPropType, CutterPropType } from 'models';
+import { FailedActionPropType } from 'models/AppPropTypes';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
-import { FailedActionPropType } from '../../models/AppPropTypes';
-
-function getModalStyle() {
-  return {
-    top: `${50}%`,
-    left: `${50}%`,
-    transform: `translate(-${50}%, -${50}%)`,
-  };
-}
+import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: 'absolute',
-    width: 'auto',
-    height: 'auto',
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: '4px',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
+
   wrapper: {
     display: 'flex',
     flexDirection: 'row'
@@ -61,31 +42,39 @@ const useStyles = makeStyles((theme) => ({
     top: '-10px',
     right: '-10px',
     zIndex: 10
+  },
+  cardWrapper: {
+    position: 'relative'
+  },
+  paper: {
+    position: 'absolute',
+    width: 'auto',
+    height: 'auto',
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: '4px',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   }
 }));
 
-
 const BiddingDashboard = ({
-  assignments, selectAssignment, deselectAssignment, removeAssignment, cutters, failed
+  assignments,
+  selectAssignment,
+  removeAssignment,
+  cutters,
+  failed
 }) => {
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = useState(getModalStyle);
-  const [open, setOpen] = useState(false);
-  const handleOpen = (id) => {
-    setOpen(true);
-    selectAssignment(id);
-  };
 
-  const handleClose = () => {
-    setOpen(false);
-    deselectAssignment();
+  const handleOpen = (id) => {
+    selectAssignment(id);
   };
 
   if (!assignments) {
     return <h2>No assignments yet!</h2>;
   }
 
+  console.log('rendergin dashboard');
   return (
     <div className={classes.wrapper}>
       {
@@ -101,7 +90,7 @@ const BiddingDashboard = ({
             </div>
             {
               assignments.filter((x) => x.cutterId == cutter.id).map((item) => (
-                <div style={{ position: 'relative' }} key={item.id}>
+                <div className={classes.cardWrapper} key={item.id}>
                   <IconButton aria-label="delete" onClick={() => removeAssignment(item.id)} className={classes.removeButton}>
                     <DeleteIcon fontSize="large" />
                   </IconButton>
@@ -117,29 +106,26 @@ const BiddingDashboard = ({
           </div>
         ))
       }
-      <Modal
-        open={open}
-        onClose={handleClose}
-      >
-        <div style={modalStyle} className={classes.paper}>
-          <IconButton className={classes.closeButton} aria-label="close" onClick={handleClose}>
-            <CloseIcon fontSize="large" />
-          </IconButton>
-          <BiddingTable onClose={handleClose} />
-        </div>
-      </Modal>
     </div>
   );
 };
 
-
 BiddingDashboard.propTypes = {
   assignments: PropTypes.arrayOf(AssignmentPropType).isRequired,
   selectAssignment: PropTypes.func.isRequired,
-  deselectAssignment: PropTypes.func.isRequired,
   removeAssignment: PropTypes.func.isRequired,
   cutters: PropTypes.arrayOf(CutterPropType).isRequired,
   failed: PropTypes.arrayOf(FailedActionPropType)
 };
 
-export default BiddingDashboard;
+function propsAreEqual(prev, next) {
+
+  if (prev === next) return true;
+
+  if (next.assignments === prev.assignments && next.cutters === prev.cutters && next.failed === prev.failed)
+    return true;
+
+  return false;
+}
+
+export default React.memo(BiddingDashboard, propsAreEqual);

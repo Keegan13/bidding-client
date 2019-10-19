@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import './style.scss';
+import clsx from 'clsx';
 import {
-  lighten, withStyles
+  lighten,
+  withStyles
 } from '@material-ui/core/styles';
 import moment from 'moment';
 import Countdown from 'react-countdown-now';
@@ -11,7 +13,7 @@ import LoadingIndicator from 'components/LoadingIndicator';
 import { ASSIGNMENT_STATUSES, AssignmentPropType } from 'models';
 import { IconButton } from '@material-ui/core';
 import WarningIcon from '@material-ui/icons/Warning';
-import { classes } from 'istanbul-lib-coverage';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 const STATUSES = {
@@ -20,6 +22,43 @@ const STATUSES = {
   toBePlaced: 'to-be-placed',
   error: 'error'
 };
+
+const useStyles = makeStyles({
+  biddingCard: {
+    display: 'inline-block',
+    margin: '20px',
+    padding: '5px',
+    width: '350px',
+    height: '210px',
+    position: 'relative',
+    '&: hover': {
+      cursor: 'pointer',
+      boxShadow: 'gray 0px 0px 5px 5px'
+    },
+    '&.selected': {
+      borderColor: 'red'
+    },
+    '&.pending': {
+      backgroundColor: '#ff9900'
+    },
+    '&.placed': {
+      backgroundColor: '#009e0f'
+    },
+    '&.to-be-placed': {
+      backgroundColor: '#ffe599'
+    },
+    '&.error': {
+      backgroundColor: '#ea9999'
+    },
+    '.countdownText': {
+      position: 'absolute',
+      top: '0px',
+      right: '0px',
+      padding: '10px',
+      fontWeight: 600
+    }
+  }
+});
 
 const BorderLinearProgress = withStyles({
   root: {
@@ -73,9 +112,11 @@ const getStatusClass = (assignment) => {
 };
 
 const BiddingCard = ({ assignment, withWarning, ...other }) => {
+  const classes = useStyles();
   if (!assignment) {
     return <LoadingIndicator />;
   }
+
 
   const [state, setState] = useState({
     status: getStatusClass(assignment),
@@ -118,9 +159,10 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
     return <span className="countdown-text">{hours * 3600 + minutes * 60 + seconds} s</span>;
   };
 
+  console.log('Rerender' + assignment.id);
   return (
     <Card
-      className={`bidding-card ${state.status} ${state.timeout ? 'timeout' : null}`}
+      className={clsx(classes.biddingCard, state.status, state.timeout ? 'timeout' : null)}
       {...other}
     >
       <h4>{assignment.location}</h4>
@@ -160,5 +202,13 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
 BiddingCard.propTypes = {
   assignment: AssignmentPropType.isRequired
 };
+
+// function propsAreEqual(prev, next) {
+//   if (prev === next) return true;
+//   if (prev.assignment === next.assignment && prev.withWarning === next.withWarning) {
+//     return true;
+//   }
+//   return false;
+// }
 
 export default BiddingCard;
