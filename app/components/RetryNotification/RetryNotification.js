@@ -5,7 +5,7 @@ import { FailedActionPropType } from 'models';
 import CachedIcon from '@material-ui/icons/Cached';
 import CloseIcon from '@material-ui/icons/Close';
 import Notification from 'components/Notification';
-import { NOTIFICATION_TYPES } from 'constant';
+import { NOTIFICATION_TYPES } from 'models/constants';
 import { IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import ErrorIcon from '@material-ui/icons/Error';

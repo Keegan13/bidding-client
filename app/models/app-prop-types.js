@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { NOTIFICATION_TYPES } from 'constant';
+import { NOTIFICATION_TYPES } from './constants';
 import * as _ from 'lodash';
 
 

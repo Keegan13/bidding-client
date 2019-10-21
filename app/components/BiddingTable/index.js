@@ -12,15 +12,15 @@ import BiddingTable from './BiddingTable';
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   reloadAssignment: loadOrReloadAssignmentThunk,
-  setStatus: setAssignmentStatusThunk,
+  setAssignmentStatus: setAssignmentStatusThunk,
   addComment: addCommentThunk,
-  retry: retryRequestThunk,
-  removeRetry: removeFailedAction
+  retryFailedAction: retryRequestThunk,
+  removeFailedAction: removeFailedAction
 }, dispatch);
 
 const mapStateToProps = createStructuredSelector({
   assignment: makeSelectSelectedAssignment(),
-  failed: makeSelectFailedActions()
+  failedActions: makeSelectFailedActions()
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

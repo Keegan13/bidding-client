@@ -7,9 +7,8 @@ import {
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { createNotificationMiddleware } from 'api/apiMiddleware';
-import { NOTIFICATION_TYPES } from 'constant';
 import createReducer from './reducers';
-import { API_ACTION_TYPES } from './api/constants';
+
 
 export default function configureStore(initialState = {}) {
   const notificationConfig = {

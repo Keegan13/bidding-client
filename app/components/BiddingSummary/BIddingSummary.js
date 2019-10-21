@@ -1,10 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { Card } from '@material-ui/core';
-import Countdown from 'react-countdown-now';
-
 
 const useStyles = makeStyles((theme) => ({
   root: {

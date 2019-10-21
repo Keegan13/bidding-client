@@ -3,13 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PhoneIcon from '@material-ui/icons/Phone';
 import BiddingCard from 'components/BiddingCard';
-import { AssignmentPropType, CutterPropType } from 'models';
-import { FailedActionPropType } from 'models/AppPropTypes';
+import { AssignmentPropType, CutterPropType, FailedActionPropType } from 'models';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
-
   wrapper: {
     display: 'flex',
     flexDirection: 'row'
@@ -44,7 +42,8 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 10
   },
   cardWrapper: {
-    position: 'relative'
+    position: 'relative',
+    cursor: 'pointer'
   },
   paper: {
     position: 'absolute',
@@ -74,7 +73,6 @@ const BiddingDashboard = ({
     return <h2>No assignments yet!</h2>;
   }
 
-  console.log('rendergin dashboard');
   return (
     <div className={classes.wrapper}>
       {
