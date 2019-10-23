@@ -5,16 +5,6 @@ import { API_ACTION_TYPES as Types } from './constants';
 // Types
 export const apiTypes = [..._.values(Types)];
 
-
-function replaceOrInsert(array, assignment) {
-  const index = array.findIndex((x) => x.id === assignment.id);
-  if (index !== -1) {
-    return [...array.slice(0, index > 0 ? index : 0), assignment, ...array.slice(index + 1)];
-  }
-
-  return [...array, assignment];
-}
-
 // Handlers
 const apiHandlers = {
   ...createDefaultApiHandlers(apiTypes),
@@ -76,6 +66,19 @@ const apiHandlers = {
     const { items } = action.payload;
     return { ...state, bookmakers: [...items] }
   }
+}
+
+/**
+ * Helpers
+ */
+
+function replaceOrInsert(array, assignment) {
+  const index = array.findIndex((x) => x.id === assignment.id);
+  if (index !== -1) {
+    return [...array.slice(0, index > 0 ? index : 0), assignment, ...array.slice(index + 1)];
+  }
+
+  return [...array, assignment];
 }
 
 export default apiHandlers;

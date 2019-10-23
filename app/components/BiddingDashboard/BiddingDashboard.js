@@ -6,6 +6,8 @@ import BiddingCard from 'components/BiddingCard';
 import { AssignmentPropType, CutterPropType, FailedActionPropType } from 'models';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { BookmakerPropType } from '../../models/app-prop-types';
+import List from 'components/List';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -60,7 +62,7 @@ const BiddingDashboard = ({
   assignments,
   selectAssignment,
   removeAssignment,
-  cutters,
+  bookmakers,
   failed
 }) => {
   const classes = useStyles();
@@ -76,18 +78,20 @@ const BiddingDashboard = ({
   return (
     <div className={classes.wrapper}>
       {
-        cutters.map((cutter) => (
-          <div className={classes.column} id={`cutter-${cutter.id}`} key={cutter.id}>
+        bookmakers.map((bookmaker) => (
+          <div className={classes.column} id={`bookmaker-${bookmaker.bookmakerId}`} key={bookmaker.bookmakerId}>
             <div className={classes.cutter}>
               <h2 style={{ display: 'inline-block' }}>
-                Cutter {cutter.id}
+                {bookmaker.bookmakerName}
               </h2>
+              <h4>Cutters: </h4>
+              <List component={({ item }) => <li key={item.id} >{item.fullName}</li>} items={bookmaker.cutters}></List>
               <IconButton aria-label="call" className={classes.callButton}>
                 <PhoneIcon fontSize="large" />
               </IconButton>
             </div>
             {
-              assignments.filter((x) => x.cutterId == cutter.id).map((item) => (
+              assignments.filter((x) => x.bookmakerId == bookmaker.bookmakerId).map((item) => (
                 <div className={classes.cardWrapper} key={item.id}>
                   <IconButton aria-label="delete" onClick={() => removeAssignment(item.id)} className={classes.removeButton}>
                     <DeleteIcon fontSize="large" />
@@ -112,7 +116,7 @@ BiddingDashboard.propTypes = {
   assignments: PropTypes.arrayOf(AssignmentPropType).isRequired,
   selectAssignment: PropTypes.func.isRequired,
   removeAssignment: PropTypes.func.isRequired,
-  cutters: PropTypes.arrayOf(CutterPropType).isRequired,
+  bookmakers: PropTypes.arrayOf(BookmakerPropType).isRequired,
   failed: PropTypes.arrayOf(FailedActionPropType)
 };
 
@@ -120,7 +124,7 @@ function propsAreEqual(prev, next) {
 
   if (prev === next) return true;
 
-  if (next.assignments === prev.assignments && next.cutters === prev.cutters && next.failed === prev.failed)
+  if (next.assignments === prev.assignments && next.bookmakers === prev.bookmakers && next.failed === prev.failed)
     return true;
 
   return false;

@@ -11,6 +11,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Modal from '@material-ui/core/Modal';
 import BiddingTable from 'components/BiddingTable';
 import './style.scss';
+import { BookmakerPropType } from '../../models/app-prop-types';
 
 const useStyles = makeStyles((theme) => ({
   biddingPage: {
@@ -48,7 +49,8 @@ const BiddingPage = ({
   deselectAssignment,
   removeNotification,
   connectToHub,
-  cutters,
+  bookmakers,
+  loadBookmakers,
   failed
 }) => {
   const classes = useStyles();
@@ -58,8 +60,9 @@ const BiddingPage = ({
   };
 
   useEffect(() => {
-    // loadAssignments();
     connectToHub();
+    loadAssignments();
+    loadBookmakers();
   }, []);
 
   const handleClose = () => {
@@ -70,7 +73,7 @@ const BiddingPage = ({
     <div className={classes.biddingPage}>
       <NotificationQueue notifications={notifications} onNotificationClose={onClose} onNotificationTimeout={onClose} />
       <BiddingSummary assignments={assignments} />
-      <BiddingDashboard {...{ assignments, selectAssignment, removeAssignment, cutters, failed }} />
+      <BiddingDashboard {...{ assignments, selectAssignment, removeAssignment, bookmakers, failed }} />
       <Modal
         open={selected ? true : false}
         onClose={handleClose}
@@ -91,6 +94,8 @@ BiddingPage.propTypes = {
   assignments: PropTypes.arrayOf(AssignmentPropType).isRequired,
   removeNotification: PropTypes.func,
   connectToHub: PropTypes.func,
+  loadBookmakers: PropTypes.func.isRequired,
+  bookmakers: PropTypes.arrayOf(BookmakerPropType)
 };
 
 export default BiddingPage;

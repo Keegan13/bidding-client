@@ -76,7 +76,7 @@ const getAssignmentProgress = (assignment) => {
 };
 
 const isTimeOut = (ass) => {
-  const endTicks = moment(ass.raceStartDateTime).valueOf() + ass.timeOutInSeconds*1000;
+  const endTicks = moment(ass.raceStartDateTime).valueOf() + ass.timeOutInSeconds * 1000;
   const nowTicks = Date.now();
   return !!(nowTicks >= endTicks);
 };
@@ -124,10 +124,13 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
   return (
     <Card
       className={clsx(classes.biddingCard, state.status, state.timeout ? 'timeout' : null)}
+
       {...other}
     >
-      <h4>{assignment.location}</h4>
+      <h4>{assignment.raceName} - {assignment.trackName}</h4>
 
+      <h4>Horse {assignment.horseId} - {assignment.horseName}</h4>
+      <h5>${assignment.amount}</h5>
       {withWarning ? (
         <div className={classes.errorWrapper}>
           <WarningIcon fontSize="large" />
@@ -135,22 +138,11 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
       ) : null
       }
       <Countdown
-        date={moment(assignment.raceStartDateTime).valueOf() + assignment.timeOutInSeconds*1000}
+        date={moment(assignment.raceStartDateTime).valueOf() + assignment.timeOutInSeconds * 1000}
         renderer={countDownRenderer}
         // controlled={true}
         onComplete={onCountdownCompleteHandler}
       />
-      <p>
-        Init {moment(assignment.raceStartDateTime).format('YYYY-MM-DD hh:mm:ss')}
-        Deadline {moment(assignment.raceStartDateTime).add(assignment.timeOutInSeconds*1000, 'seconds').format('hh:mm:ss')}
-        <br />
-
-        Amount: {assignment.amount}
-
-      </p>
-      <p>
-        Received: {moment(assignment.receivedDate).format('MM-DD hh:mm:ss')}
-      </p>
       <LinearProgressBar
         variant="determinate"
         color="secondary"

@@ -1,16 +1,17 @@
 import * as faker from 'faker';
-import { generateAssignments, generateAssignment } from '../utils/mocks';
+import { generateAssignments, generateAssignment, generateBookmaker } from '../utils/mocks';
 
 function createPromise(data) {
   const promise = new Promise(((resolve, reject) => {
     setTimeout(() => {
-      if (faker.random.number(10) % 3 === 0) {
+      if (faker.random.number(10) % 3 === 140) {
+
         reject('error');
       } else {
         resolve(data);
       }
     },
-    faker.random.number(100)
+      faker.random.number(100)
     );
   }));
   return promise;
@@ -65,6 +66,16 @@ export const BiddingApi = {
 
   loadAssignment(id) {
     return createPromise(generateAssignment(id));
+  },
+  loadBookmakers() {
+    let data = [];
+    let len = faker.random.number(3);
+    for (let i = 0; i < 3; i++) {
+      data.push(generateBookmaker(i))
+    }
+
+    return createPromise(
+      { items: data });
   }
 };
 

@@ -173,6 +173,40 @@ export function setAssignmentStatusThunk(assignmentId, status) {
   };
 }
 
+
+/**
+ * Makes asynchronous request to load bookmaker array
+ *
+ * @return {function}  - that accepts  dispatch as parameter and makes asynchronous call to api
+ */
+export function loadBookmakersThunk() {
+  return async (dispatch) => {
+    dispatch(resolveAction(ApiTypes.GET_ASSIGNMENTS_PENDING));
+
+    try {
+      let response = await api.loadBookmakers();
+      if (response.error) {
+        throw (response.error);
+      }
+      response = dateReceivedPipe(response);
+      dispatch(resolveAction(ApiTypes.GET_ASSIGNMENTS_SUCCESS, { payload: response }));
+      return response;
+    } catch (error) {
+      const failedAction = {
+        id: Date.now(),
+        message: 'Failed to load bookmakers',
+        retry: loadBookmakersThunk.bind(this),
+        retryFunctionName: loadBookmakersThunk.name,
+        parameters: {},
+        actionType: ApiTypes.GET_ASSIGNMENT_ERROR,
+        dateFailed: new Date(Date.now())
+      };
+      dispatch(resolveAction(ApiTypes.GET_ASSIGNMENTS_ERROR, { error, failedAction }));
+    }
+  };
+}
+
+
 /**
  * Repeats failed action
  *

@@ -40,12 +40,10 @@ const makeSelectSelectedAssignment = () => createSelector(
 );
 
 const getAssignmentStatus = (assignment) => {
-
   const isError = (ass) => (ass.status === ASSIGNMENT_STATUSES.ERROR);
   const isPlaced = (ass) => !!(ass.status === ASSIGNMENT_STATUSES.PLACED || ass.placedBets.reduce((agg, next) => agg += next.volume, 0) >= ass.amount);
   const isToBePlaced = (ass) => (!!(ass.status === ASSIGNMENT_STATUSES.TO_BE_PLACED || !ass.placedBets || ass.placedBets.length == 0));
   const isPending = (ass) => ass.status === ASSIGNMENT_STATUSES.PENDING;
-
 
   if (isError(assignment)) {
     return ASSIGNMENT_STATUSES.ERROR;
@@ -74,38 +72,16 @@ const makeSelectError = (actionType) => createSelector(
   }
 );
 
-const mapBookmakerToCutter = () => {
-
-};
-
 const makeSelectFailedActions = () => createSelector(
   selectBidding,
   (biddingSection) => biddingSection.failedActions
 );
 
-const makeSelectCutters = () => createSelector(
+const makeSelectBookmakers = () => createSelector(
   selectBidding,
   (biddingSection) => {
-    const { bookmakers } = biddingSection;
-
-    const cObj = bookmakers.reduce((agg, next) => {
-      next.cutters.forEach(x => {
-        let item = agg.cutters.find(c => c.id == x.id);
-        if (!item) {
-          item = { ...x, bookmakers: [] };
-          agg.cutters.push(item);
-        }
-        if (!item.bookmakers.some(b => b.bookmakerId != next.bookmakerId)) {
-          item.bookmakers = [...item.bookmakers, { bookmakerId: next.bookmakerId, bookmakerName: next.bookmakerName }];
-        }
-      });
-
-      return agg;
-    }, {
-      cutters: []
-    });
-
-    return cObj.cutters;
+    
+    return biddingSection.bookmakers;
   }
 );
 
@@ -119,8 +95,8 @@ export {
   makeSelectBet,
   makeSelectSelectedAssignment,
   makeSelectAssignment,
-  makeSelectCutters,
   makeSelectNotifications,
   getAssignmentStatus,
-  makeSelectFailedActions
+  makeSelectFailedActions,
+  makeSelectBookmakers
 };

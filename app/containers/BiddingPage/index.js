@@ -2,12 +2,13 @@ import { connect } from 'react-redux';
 import { compose, bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import {
+  makeSelectBookmakers,
   makeSelectAssignments,
   makeSelectSelectedAssignment,
   makeSelectNotifications,
   makeSelectFailedActions
 } from 'selectors/bidding';
-import { loadAssignmentsThunk } from 'api/thunks';
+import { loadAssignmentsThunk, loadBookmakersThunk } from 'api/thunks';
 import { connectToHubThunk } from 'live/thunks';
 import { removeNotification, selectAssignment, deselectAssignment, removeAssignment } from 'actions/bidding';
 import BiddingPage from './BiddingPage';
@@ -19,7 +20,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   removeNotification,
   removeAssignment,
   selectAssignment,
-  deselectAssignment
+  deselectAssignment,
+  loadBookmakers: loadBookmakersThunk
 }, dispatch);
 
 const mapStateToProps = createStructuredSelector({
@@ -28,7 +30,7 @@ const mapStateToProps = createStructuredSelector({
   notifications: makeSelectNotifications(),
   selected: makeSelectSelectedAssignment(),
   failed: makeSelectFailedActions(),
-  cutters: makeSelectCutters()
+  bookmakers: makeSelectBookmakers()
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

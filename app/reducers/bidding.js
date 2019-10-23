@@ -27,8 +27,7 @@ const initialState = {
   },
   bookmakers: [],
   notifications: [],
-  failedActions: [],
-  cutters: [...(cuttersFromWindow || [])]
+  failedActions: []
 };
 
 const biddingReducer = createReducer(initialState,

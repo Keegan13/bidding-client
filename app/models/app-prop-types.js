@@ -1,5 +1,5 @@
-import PropTypes, { number } from 'prop-types';
-import { NOTIFICATION_TYPES } from './constants';
+import PropTypes from 'prop-types';
+import { NOTIFICATION_TYPES, ASSIGNMENT_STATUSES } from './constants';
 import * as _ from 'lodash';
 
 
@@ -28,7 +28,19 @@ export const BetPropType = PropTypes.shape({
  * Cutter model validation
  */
 export const CutterPropType = PropTypes.shape({
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  fullName: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  login: PropTypes.string.isRequired
+});
+
+/**
+ * Bookmaker model validation
+ */
+export const BookmakerPropType = PropTypes.shape({
+  bookmakerId: PropTypes.number.isRequired,
+  bookmakerName: PropTypes.string.isRequired,
+  cutters: PropTypes.arrayOf(CutterPropType)
 });
 
 /**
@@ -49,11 +61,10 @@ export const AssignmentPropType = PropTypes.shape({
   timeOutInSeconds: PropTypes.number,
   raceStartDateTime: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
   notes: PropTypes.string,
-  timestampUtc: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
-  recommendationStatusType: PropTypes.oneOf([]),
-
-
-  cutterId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  timestampUtc: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
+  recommendationStatusType: PropTypes.oneOf([..._.values(ASSIGNMENT_STATUSES)]),
+  //to be removed
+  cutterId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   placedBets: PropTypes.arrayOf(BetPropType)
 });
 
