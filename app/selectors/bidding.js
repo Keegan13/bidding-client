@@ -74,6 +74,10 @@ const makeSelectError = (actionType) => createSelector(
   }
 );
 
+const mapBookmakerToCutter = () => {
+
+};
+
 const makeSelectFailedActions = () => createSelector(
   selectBidding,
   (biddingSection) => biddingSection.failedActions
@@ -81,9 +85,29 @@ const makeSelectFailedActions = () => createSelector(
 
 const makeSelectCutters = () => createSelector(
   selectBidding,
-  (biddingSection) => biddingSection.cutters
-);
+  (biddingSection) => {
+    const { bookmakers } = biddingSection;
 
+    const cObj = bookmakers.reduce((agg, next) => {
+      next.cutters.forEach(x => {
+        let item = agg.cutters.find(c => c.id == x.id);
+        if (!item) {
+          item = { ...x, bookmakers: [] };
+          agg.cutters.push(item);
+        }
+        if (!item.bookmakers.some(b => b.bookmakerId != next.bookmakerId)) {
+          item.bookmakers = [...item.bookmakers, { bookmakerId: next.bookmakerId, bookmakerName: next.bookmakerName }];
+        }
+      });
+
+      return agg;
+    }, {
+      cutters: []
+    });
+
+    return cObj.cutters;
+  }
+);
 
 const makeSelectNotifications = () => createSelector(selectBidding,
   (biddingSection) => biddingSection.notifications);

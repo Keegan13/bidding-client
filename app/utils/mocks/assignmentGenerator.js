@@ -27,9 +27,9 @@ export function generateAssignment(id, status) {
     number: 1,
     cutterId: faker.random.number({ min: 1, max: 3 }),
     location: faker.address.city(),
-    startDateTime: (new Date(Date.now())).toString(),
+    raceStartDateTime: (new Date(Date.now())).toString(),
     amount: 0,
-    timeSpan: faker.random.number({ min: 10, max: 220 }) * 1000,
+    timeOutInSeconds: faker.random.number({ min: 10, max: 220 }),
     placedBets: [...generateBets(faker.random.number({ min: 0, max: 4 }), id)]
   };
 

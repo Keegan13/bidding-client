@@ -25,6 +25,7 @@ const initialState = {
     placed: 1,
     win: 1
   },
+  bookmakers: [],
   notifications: [],
   failedActions: [],
   cutters: [...(cuttersFromWindow || [])]

@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes, { number } from 'prop-types';
 import { NOTIFICATION_TYPES } from './constants';
 import * as _ from 'lodash';
 
@@ -35,12 +35,25 @@ export const CutterPropType = PropTypes.shape({
  * Assignment model validation
  */
 export const AssignmentPropType = PropTypes.shape({
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  location: PropTypes.string,
-  startDateTime: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  id: PropTypes.number,
+  raceId: PropTypes.number,
+  raceName: PropTypes.string,
+  trackName: PropTypes.string,
+  bookmakerId: PropTypes.number,
+  bookmakerName: PropTypes.string,
+  horseId: PropTypes.number,
+  horseName: PropTypes.string,
+  amount: PropTypes.number,
+  numerator: PropTypes.number,
+  denominator: PropTypes.number,
+  timeOutInSeconds: PropTypes.number,
+  raceStartDateTime: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  notes: PropTypes.string,
+  timestampUtc: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  recommendationStatusType: PropTypes.oneOf([]),
+
+
   cutterId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  amount: PropTypes.number.isRequired,
-  timeSpan: PropTypes.number.isRequired,
   placedBets: PropTypes.arrayOf(BetPropType)
 });
 

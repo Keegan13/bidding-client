@@ -76,7 +76,7 @@ const getAssignmentProgress = (assignment) => {
 };
 
 const isTimeOut = (ass) => {
-  const endTicks = moment(ass.startDateTime).valueOf() + ass.timeSpan;
+  const endTicks = moment(ass.raceStartDateTime).valueOf() + ass.timeOutInSeconds*1000;
   const nowTicks = Date.now();
   return !!(nowTicks >= endTicks);
 };
@@ -135,14 +135,14 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
       ) : null
       }
       <Countdown
-        date={moment(assignment.startDateTime).valueOf() + assignment.timeSpan}
+        date={moment(assignment.raceStartDateTime).valueOf() + assignment.timeOutInSeconds*1000}
         renderer={countDownRenderer}
         // controlled={true}
         onComplete={onCountdownCompleteHandler}
       />
       <p>
-        Init {moment(assignment.startDateTime).format('YYYY-MM-DD hh:mm:ss')}
-        Deadline {moment(assignment.startDateTime).add(assignment.timeSpan, 'milliseconds').format('hh:mm:ss')}
+        Init {moment(assignment.raceStartDateTime).format('YYYY-MM-DD hh:mm:ss')}
+        Deadline {moment(assignment.raceStartDateTime).add(assignment.timeOutInSeconds*1000, 'seconds').format('hh:mm:ss')}
         <br />
 
         Amount: {assignment.amount}

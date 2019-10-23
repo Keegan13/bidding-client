@@ -1,13 +1,5 @@
 {
   "name": "bidding-client",
-  "version": "0.2.0",
-  "description": "Hourse riding bidding app",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/Keegan13/bidding-client.git"
-  },
-  "license": "none",
-  "author": "Andrew Ilyin",
   "scripts": {
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",

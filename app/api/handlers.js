@@ -71,7 +71,11 @@ const apiHandlers = {
     }
 
     return { ...state, assignments: replaceOrInsert(state.assignments, { ...targetAssignment, comments: [...(targetAssignment.comments || []), comment] }) };
+  },
+  [Types.GET_ASSIGNMENTS_SUCCESS]: (state, action) => {
+    const { items } = action.payload;
+    return { ...state, bookmakers: [...items] }
   }
-};
+}
 
 export default apiHandlers;
