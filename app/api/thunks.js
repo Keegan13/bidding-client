@@ -3,6 +3,7 @@ import { removeFailedAction } from 'actions';
 import { resolveAction, dateReceivedPipe } from './helpers';
 import { API_ACTION_TYPES as ApiTypes } from './constants';
 import api from './index';
+import Axios from 'axios';
 
 
 /**

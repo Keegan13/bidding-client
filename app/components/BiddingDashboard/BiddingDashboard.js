@@ -82,7 +82,7 @@ const BiddingDashboard = ({
           <div className={classes.column} id={`bookmaker-${bookmaker.bookmakerId}`} key={bookmaker.bookmakerId}>
             <div className={classes.cutter}>
               <h2 style={{ display: 'inline-block' }}>
-                {bookmaker.bookmakerName}
+                Bookmaker: {bookmaker.bookmakerName}
               </h2>
               <h4>Cutters: </h4>
               <List component={({ item }) => <li key={item.id} >{item.fullName}</li>} items={bookmaker.cutters}></List>
