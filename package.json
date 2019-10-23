@@ -9,6 +9,7 @@
   "license": "none",
   "author": "Andrew Ilyin",
   "scripts": {
+    "build2": "cross-env NODE_ENV=production webpack --config app/webpack.config.js --color -p --progress --hide-modules --display-optimization-bailout",
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:clean": "rimraf ./build",
