@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\app",
+    "\\app\\actions",
+    "\\app\\api",
+    "\\app\\components",
+    "\\app\\components\\BiddingTable",
+    "\\app\\components\\BiddingTable\\BetForm"
+  ],
+  "SelectedNode": "\\app\\components\\BiddingTable\\BetForm\\BetForm.js",
+  "PreviewInSolutionExplorer": false
+}

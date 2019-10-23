@@ -40,15 +40,25 @@ const makeSelectSelectedAssignment = () => createSelector(
 );
 
 const getAssignmentStatus = (assignment) => {
-  if (assignment.status) {
-    return assignment.status;
+
+  const isError = (ass) => (ass.status === ASSIGNMENT_STATUSES.ERROR);
+  const isPlaced = (ass) => !!(ass.status === ASSIGNMENT_STATUSES.PLACED || ass.placedBets.reduce((agg, next) => agg += next.volume, 0) >= ass.amount);
+  const isToBePlaced = (ass) => (!!(ass.status === ASSIGNMENT_STATUSES.TO_BE_PLACED || !ass.placedBets || ass.placedBets.length == 0));
+  const isPending = (ass) => ass.status === ASSIGNMENT_STATUSES.PENDING;
+
+
+  if (isError(assignment)) {
+    return ASSIGNMENT_STATUSES.ERROR;
   }
 
-  if (!assignment.placedBet || assignment.placedBet.length === 0) {
+  if (isPending(assignment)) {
+    return ASSIGNMENT_STATUSES.PENDING;
+  }
+  if (isToBePlaced(assignment)) {
     return ASSIGNMENT_STATUSES.TO_BE_PLACED;
   }
 
-  if (assignment.placedBet.reduce((agg, next) => agg += next.volume, 0) >= assignment.amount) {
+  if (isPlaced(assignment)) {
     return ASSIGNMENT_STATUSES.PLACED;
   }
 

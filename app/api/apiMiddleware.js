@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { addNotification } from 'actions';
-import { NOTIFICATION_TYPES } from 'constant';
+import { NOTIFICATION_TYPES } from 'models/constants';
 
 // const getLevelFromType = (type) => {
 //     with (NOTIFICATION_TYPES) {

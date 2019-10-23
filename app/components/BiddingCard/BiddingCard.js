@@ -1,29 +1,35 @@
-import React, { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
-import './style.scss';
-import clsx from 'clsx';
-import {
-  lighten,
-  withStyles
-} from '@material-ui/core/styles';
-import moment from 'moment';
-import Countdown from 'react-countdown-now';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import LoadingIndicator from 'components/LoadingIndicator';
-import { ASSIGNMENT_STATUSES, AssignmentPropType } from 'models';
-import { IconButton } from '@material-ui/core';
-import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
+import WarningIcon from '@material-ui/icons/Warning';
+import clsx from 'clsx';
+import LoadingIndicator from 'components/LoadingIndicator';
+import { AssignmentPropType, ASSIGNMENT_STATUSES } from 'models';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import Countdown from 'react-countdown-now';
+import { getAssignmentStatus } from 'selectors';
+import LinearProgressBar from 'components/LinearProgressBar';
 
 
-const STATUSES = {
-  pending: 'pending',
-  placed: 'placed',
-  toBePlaced: 'to-be-placed',
-  error: 'error'
-};
 
 const useStyles = makeStyles({
+  cardWrapper: {
+    backgroundColor: 'white'
+  },
+  errorWrapper: {
+    position: 'absolute',
+    top: '8px',
+    color: 'rgba(0, 0, 0, 0.54)',
+    right: '50%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    //background-color: rgba(167, 73, 73, 0.45);
+    transform: `translateX(${50}%)`,
+    //border-radius: 6px;
+    //border: 2px solid #ad2b2b6b;
+    transform: `translateX(${50}%)`
+  },
   biddingCard: {
     display: 'inline-block',
     margin: '20px',
@@ -49,26 +55,16 @@ const useStyles = makeStyles({
     },
     '&.error': {
       backgroundColor: '#ea9999'
-    },
-    '.countdownText': {
-      position: 'absolute',
-      top: '0px',
-      right: '0px',
-      padding: '10px',
-      fontWeight: 600
     }
+  },
+  countdownText: {
+    position: 'absolute',
+    top: '0px',
+    right: '0px',
+    padding: '10px',
+    fontWeight: 600
   }
 });
-
-const BorderLinearProgress = withStyles({
-  root: {
-    height: 17,
-    backgroundColor: lighten('#ffffff', 0.5),
-  },
-  bar: {
-    backgroundColor: '#cccccc'
-  },
-})(LinearProgress);
 
 
 const getAssignmentProgress = (assignment) => {
@@ -82,33 +78,7 @@ const getAssignmentProgress = (assignment) => {
 const isTimeOut = (ass) => {
   const endTicks = moment(ass.startDateTime).valueOf() + ass.timeSpan;
   const nowTicks = Date.now();
-  return nowTicks >= endTicks;
-};
-
-
-const getStatusClass = (assignment) => {
-  const isError = (ass) => (ass.status === ASSIGNMENT_STATUSES.ERROR);
-  const isPlaced = (ass) => !!(ass.status === ASSIGNMENT_STATUSES.PLACED || ass.placedBets.reduce((agg, next) => agg += next.volume, 0) >= ass.amount);
-  const isToBePlaced = (ass) => (!!(ass.status === ASSIGNMENT_STATUSES.TO_BE_PLACED || !ass.placedBets || ass.placedBets.length == 0));
-  const isPending = (ass) => ass.status === ASSIGNMENT_STATUSES.PENDING;
-
-
-  if (isError(assignment)) {
-    return STATUSES.error;
-  }
-
-  if (isPending(assignment)) {
-    return STATUSES.pending;
-  }
-  if (isToBePlaced(assignment)) {
-    return STATUSES.toBePlaced;
-  }
-
-  if (isPlaced(assignment)) {
-    return STATUSES.placed;
-  }
-
-  return STATUSES.pending;
+  return !!(nowTicks >= endTicks);
 };
 
 const BiddingCard = ({ assignment, withWarning, ...other }) => {
@@ -119,7 +89,7 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
 
 
   const [state, setState] = useState({
-    status: getStatusClass(assignment),
+    status: getAssignmentStatus(assignment),
     progress: getAssignmentProgress(assignment),
     timeout: isTimeOut(assignment)
   });
@@ -127,7 +97,7 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
-      status: getStatusClass(assignment),
+      status: getAssignmentStatus(assignment),
       progress: getAssignmentProgress(assignment)
     }));
   }, [assignment, withWarning]);
@@ -145,21 +115,12 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
     hours, minutes, seconds, completed
   }) => {
     if (completed) {
-      // Render a completed state
-      return <span className="countdown-text">Timeout!</span>;// <span>DONE</span>
-      // switch (status) {
-      //   case STATUSES.pending: return <span className={"bidding-status " + status}></span>
-      //   case STATUSES.placed: return <span className={"bidding-status " + status}></span>
-      //   case STATUSES.toBePlaced: return <span className={"bidding-status " + status}>Time </span>
-      //   case STATUSES.timeout: return <span className={"bidding-status " + status}>Timeout</span>
-      //   default: return "";
-      // }
+      return <span className={classes.countdownText}>Timeout!</span>;
     }
     // Render a countdown
-    return <span className="countdown-text">{hours * 3600 + minutes * 60 + seconds} s</span>;
+    return <span className={classes.countdownText}>{hours * 3600 + minutes * 60 + seconds} s</span>;
   };
 
-  console.log('Rerender' + assignment.id);
   return (
     <Card
       className={clsx(classes.biddingCard, state.status, state.timeout ? 'timeout' : null)}
@@ -168,7 +129,7 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
       <h4>{assignment.location}</h4>
 
       {withWarning ? (
-        <div className={'errorWrapper'}>
+        <div className={classes.errorWrapper}>
           <WarningIcon fontSize="large" />
         </div>
       ) : null
@@ -190,7 +151,7 @@ const BiddingCard = ({ assignment, withWarning, ...other }) => {
       <p>
         Received: {moment(assignment.receivedDate).format('MM-DD hh:mm:ss')}
       </p>
-      <BorderLinearProgress
+      <LinearProgressBar
         variant="determinate"
         color="secondary"
         value={state.progress}
