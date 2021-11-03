@@ -59,7 +59,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "4.0.0",
     "sanitize.css": "10.0.0",
-    "validator": "^11.1.0",
+    "validator": "^13.7.0",
     "warning": "^4.0.3",
     "whatwg-fetch": "^3.0.0"
   },
