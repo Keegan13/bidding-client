@@ -39,7 +39,7 @@
     "ip": "1.1.5",
     "lodash": "^4.17.11",
     "minimist": "1.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-countdown-now": "^2.1.1",
